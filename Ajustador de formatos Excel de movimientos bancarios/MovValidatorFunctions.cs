@@ -362,12 +362,41 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         int alturaNecesaria = 40;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else
+                    else if(numeroFactura.Length >= 59 && numeroFactura.Length <= 89)
                     {
                         int alturaNecesaria = 60;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-
+                    else if (numeroFactura.Length >= 90 && numeroFactura.Length <= 120)
+                    {
+                        int alturaNecesaria = 80;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else if (numeroFactura.Length >= 121 && numeroFactura.Length <= 151)
+                    {
+                        int alturaNecesaria = 100;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else if (numeroFactura.Length >= 152 && numeroFactura.Length <= 182)
+                    {
+                        int alturaNecesaria = 120;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else if (numeroFactura.Length >= 183 && numeroFactura.Length <= 213)
+                    {
+                        int alturaNecesaria = 140;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else if (numeroFactura.Length >= 214 && numeroFactura.Length <= 234)
+                    {
+                        int alturaNecesaria = 160;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else if (numeroFactura.Length >= 235 && numeroFactura.Length <= 255)
+                    {
+                        int alturaNecesaria = 180;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
 
                     // Guardar cambios
                     using (FileStream salida = new FileStream(rutaArchivo, FileMode.Create, FileAccess.Write))
