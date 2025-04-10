@@ -325,11 +325,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     ICell celdaFactura = fila.GetCell(7) ?? fila.CreateCell(7);
                     celdaFactura.SetCellValue(numeroFactura);
                     celdaFactura.CellStyle = CloneSyleAndFormat(libro, celdaFactura.CellStyle, formato, true);
+                    celdaFactura.CellStyle.WrapText = true;
 
                     // Código de Cliente (columna 8)
                     ICell celdaCliente = fila.GetCell(8) ?? fila.CreateCell(8);
                     celdaCliente.SetCellValue(codigoCliente);
                     celdaCliente.CellStyle = CloneSyleAndFormat(libro, celdaCliente.CellStyle, formato, true);
+                    celdaCliente.CellStyle.WrapText = true;
 
                     //Celdas restantes(columna 6, 5, 4, 3, 2, 0)
                     ICell celdaFechaOriginal = fila.GetCell(0) ?? fila.CreateCell(0);
@@ -352,6 +354,19 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                     celdaSaldo.CellStyle = CloneSyleAndFormat(libro, celdaSaldo.CellStyle, formato, false);
 
+
+                    //Ajustando el tamaño de la fila para que entren los registros de código de factura
+                    // Calcular la altura manualmente *solo si hace falta
+                    if (numeroFactura.Length >= 28 && numeroFactura.Length <= 58)
+                    {
+                        int alturaNecesaria = 40;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
+                    else
+                    {
+                        int alturaNecesaria = 60;
+                        fila.HeightInPoints = alturaNecesaria;
+                    }
 
 
                     // Guardar cambios
@@ -439,6 +454,18 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                 default:
                     return "Tipo de dato desconocido";
+            }
+        }
+
+        private static int CalculateHeightForCell(string texto, short fontIndex, short fontSize)
+        {
+            // Lógica para calcular la altura necesaria en función del texto y la fuente
+            // Puedes usar la clase Graphics para medir el texto
+            using (Graphics graphics = Graphics.FromImage(new Bitmap(1, 1)))
+            {
+                Font font = new Font(System.Drawing.FontFamily.GenericSansSerif, fontSize); // Puedes ajustar la fuente
+                SizeF textSize = graphics.MeasureString(texto, font);
+                return (int)textSize.Height;
             }
         }
 
