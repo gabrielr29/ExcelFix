@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,24 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 string fechaValidacionFormateada = validationDate.ToString("dd/MM/yyyy");
                 return fechaValidacionFormateada;
             }
+            
             return "";
+        }
+
+        public static DateTime ConvertirStringADateTime(string fechaString)
+        {
+            string formato = "dd/MM/yyyy";
+
+            try
+            {
+                DateTime fechaDateTime = DateTime.ParseExact(fechaString, formato, CultureInfo.InvariantCulture, DateTimeStyles.None);
+                return fechaDateTime;
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine($"Error al convertir la fecha: {ex.Message}");
+                return DateTime.MinValue; // Retorna DateTime.MinValue en caso de error.
+            }
         }
 
         public static List<string> SearchByReferenceAndMount(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
@@ -51,15 +69,26 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
                             {
-                                DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
-                                string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+
                                 DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
                                 string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
 
-                                datosFilaEncontrada.Add($"{fechaFormateada}");
+                                if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
+                                {
+                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
+                                    string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                    datosFilaEncontrada.Add($"{fechaFormateada}");
+                                }
+
+                                else
+                                {
+                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    datosFilaEncontrada.Add($"{fecha}");
+                                }
+                                                                
                                 datosFilaEncontrada.Add($"{fechaValidacionFormateada}");
                                 datosFilaEncontrada.Add($"{referencia}");
                                 datosFilaEncontrada.Add($"{descripcion}");
@@ -110,8 +139,10 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (ingresos == montoBusqueda && egresos == 0)
                             {
-                                DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
-                                string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                
+                                //string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                //string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+
                                 DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
                                 string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
                                 string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim();
@@ -119,7 +150,19 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
 
-                                resultados.Add($"{fechaFormateada}");
+                                if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
+                                {
+                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
+                                    string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                    resultados.Add($"{fechaFormateada}");
+                                }
+
+                                else
+                                {
+                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    resultados.Add($"{fecha}");
+                                }
+                                                                
                                 resultados.Add($"{fechaValidacionFormateada}");
                                 resultados.Add($"{referencia}");
                                 resultados.Add($"{descripcion}");
@@ -167,8 +210,11 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && egresosToCompare == 0)
                             {
-                                DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
-                                string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                //DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
+                                //string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                //string fechaFormateada = FormatValidationDate(fecha);
+                                //string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+
                                 DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
                                 string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
@@ -177,7 +223,20 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
 
-                                resultados.Add($"{fechaFormateada}");
+                                if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
+                                {
+                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
+                                    string fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                    resultados.Add($"{fechaFormateada}");
+                                }
+
+                                else
+                                {
+                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    resultados.Add($"{fecha}");
+                                }
+
+                                
                                 resultados.Add($"{fechaValidacionFormateada}");
                                 resultados.Add($"{referencia}");
                                 resultados.Add($"{descripcion}");
@@ -345,6 +404,42 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             nuevoEstilo.DataFormat = generalOrOriginal ? formato.GetFormat("General") : estiloOriginal.DataFormat;
 
             return nuevoEstilo;
+        }
+
+        public static string CheckCellType(ICell celda)
+        {
+            if (celda == null)
+            {
+                return "Celda vacía";
+            }
+
+            switch (celda.CellType)
+            {
+                case CellType.String:
+                    return "Texto";
+
+                case CellType.Numeric:
+                    if (DateUtil.IsCellDateFormatted(celda))
+                    {
+                        return "Fecha";
+                    }
+                    else
+                    {
+                        return "Número";
+                    }
+
+                case CellType.Boolean:
+                    return "Booleano";
+
+                case CellType.Formula:
+                    return "Fórmula";
+
+                case CellType.Blank:
+                    return "Celda vacía";
+
+                default:
+                    return "Tipo de dato desconocido";
+            }
         }
 
 

@@ -13,9 +13,14 @@
     <Authors>Gabriel Rodriguez</Authors>
     <Description>Ajustador de formatos de consulta de movimientos bancarios Ing Gabriel Rodriguez
 </Description>
-    <PackageIcon>ajustes128.ico</PackageIcon>
+    <PackageIcon>ExcelFixLogo2.png</PackageIcon>
     <Copyright>2025</Copyright>
+    <ApplicationIcon>Resources\ExcelFixLogo2.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\ExcelFixLogo2.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Krypton.Toolkit" Version="90.25.2.55" />
@@ -35,6 +40,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\ExcelFixLogo2.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
