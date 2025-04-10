@@ -123,7 +123,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void attachFilebutton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
