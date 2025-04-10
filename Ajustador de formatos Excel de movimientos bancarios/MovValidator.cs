@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 {
@@ -68,7 +69,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     }
 
 
-                    MovValidatorFunctions.ReplaceDataGridViewValues2(dataGridView1, myList);
+                    MovValidatorFunctions.ReplaceDataGridViewValues(dataGridView1, myList);
 
                 }
 
@@ -191,16 +192,16 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         string valor = filaSeleccionada.Cells[8].Value?.ToString();
 
 
-                        if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text) && !string.IsNullOrWhiteSpace(billCodeTextBox.Text))
+                        if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text) && !string.IsNullOrWhiteSpace(clientCodeTextBox.Text))
                         {
                             MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
                             SearchBankMovesProcess();
                         }
-                        else if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text))
+                        else if (string.IsNullOrWhiteSpace(clientCodeTextBox.Text))
                         {
                             MessageBox.Show("Debe llenar el campo: Código de cliente", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
-                        else if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text))
+                        else if (string.IsNullOrWhiteSpace(billCodeTextBox.Text))
                         {
                             MessageBox.Show("Debe llenar el campo: Código de facturas", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
@@ -232,6 +233,51 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         private void clientCodeTextBox_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void bankMovMountTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Permitir dígitos, el punto decimal y teclas de control
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != ','))
+            {
+                e.Handled = true; // Ignorar el carácter ingresado
+            }
+
+            // Permitir solo un punto decimal
+            if ((e.KeyChar == ',') && (bankMovMountTextBox.Text.IndexOf(',') > -1 || string.IsNullOrEmpty(bankMovMountTextBox.Text)))
+            {
+                e.Handled = true; // Ignorar el carácter ingresado
+            }
+
+            // Limitar la longitud del texto a 50 caracteres
+            if (bankMovMountTextBox.Text.Length >= 50 && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Ignorar el carácter ingresado
+            }
+
+        }
+
+        private void bankMovMountTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void billCodeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Limitar la longitud del texto a 250 caracteres
+            if (bankMovMountTextBox.Text.Length >= 250 && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Ignorar el carácter ingresado
+            }
+        }
+
+        private void clientCodeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Limitar la longitud del texto a 250 caracteres
+            if (bankMovMountTextBox.Text.Length >= 250 && !char.IsControl(e.KeyChar))
+            {
+                e.Handled = true; // Ignorar el carácter ingresado
+            }
         }
     }
 }

@@ -141,9 +141,12 @@
             // bankMovMountTextBox
             // 
             bankMovMountTextBox.Location = new Point(53, 109);
+            bankMovMountTextBox.MaxLength = 200;
             bankMovMountTextBox.Name = "bankMovMountTextBox";
             bankMovMountTextBox.Size = new Size(221, 23);
             bankMovMountTextBox.TabIndex = 1;
+            bankMovMountTextBox.TextChanged += bankMovMountTextBox_TextChanged;
+            bankMovMountTextBox.KeyPress += bankMovMountTextBox_KeyPress;
             // 
             // FileNameTextBox
             // 
@@ -182,6 +185,7 @@
             billCodeTextBox.Name = "billCodeTextBox";
             billCodeTextBox.Size = new Size(280, 23);
             billCodeTextBox.TabIndex = 6;
+            billCodeTextBox.KeyPress += billCodeTextBox_KeyPress;
             // 
             // billCodeLabel
             // 
@@ -211,6 +215,7 @@
             clientCodeTextBox.Size = new Size(250, 23);
             clientCodeTextBox.TabIndex = 5;
             clientCodeTextBox.TextChanged += clientCodeTextBox_TextChanged;
+            clientCodeTextBox.KeyPress += clientCodeTextBox_KeyPress;
             // 
             // label1
             // 
@@ -237,6 +242,7 @@
             // ReferenceNumberTextBox
             // 
             ReferenceNumberTextBox.Location = new Point(309, 109);
+            ReferenceNumberTextBox.MaxLength = 200;
             ReferenceNumberTextBox.Name = "ReferenceNumberTextBox";
             ReferenceNumberTextBox.Size = new Size(247, 23);
             ReferenceNumberTextBox.TabIndex = 2;

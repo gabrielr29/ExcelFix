@@ -49,7 +49,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
                             decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
 
-                            if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda || egresos == montoBusqueda))
+                            if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
                             {
                                 DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
                                 string fechaFormateada = fecha.ToString("dd/MM/yyyy");
@@ -108,7 +108,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
                             decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
 
-                            if (ingresos == montoBusqueda || egresos == montoBusqueda)
+                            if (ingresos == montoBusqueda && egresos == 0)
                             {
                                 DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
                                 string fechaFormateada = fecha.ToString("dd/MM/yyyy");
@@ -163,8 +163,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         if (fila != null)
                         {
                             string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
 
-                            if (referencia == referenciaBusqueda.Trim().ToLower())
+                            if (referencia == referenciaBusqueda.Trim().ToLower() && egresosToCompare == 0)
                             {
                                 DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
                                 string fechaFormateada = fecha.ToString("dd/MM/yyyy");
@@ -202,32 +203,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return resultados;
         }
 
-
         public static void ReplaceDataGridViewValues(DataGridView dataGridView1, List<string> myList)
-        {
-            // Verifica que la lista tenga suficientes elementos para reemplazar todas las celdas
-            if (myList.Count >= dataGridView1.RowCount * dataGridView1.ColumnCount)
-            {
-                int listIndex = 0;
-
-                // Itera a través de las filas y columnas del DataGridView
-                for (int rowIndex = 0; rowIndex < dataGridView1.RowCount; rowIndex++)
-                {
-                    for (int columnIndex = 0; columnIndex < dataGridView1.ColumnCount; columnIndex++)
-                    {
-                        // Reemplaza el valor de la celda con el valor correspondiente de la lista
-                        dataGridView1.Rows[rowIndex].Cells[columnIndex].Value = myList[listIndex];
-                        listIndex++;
-                    }
-                }
-            }
-            else
-            {
-                MessageBox.Show($"La lista no tiene suficientes elementos para reemplazar todos los valores del DataGridView. {myList[0]}");
-            }
-        }
-
-        public static void ReplaceDataGridViewValues2(DataGridView dataGridView1, List<string> myList)
         {
             // Validación: Asegurar que la lista tenga una cantidad de elementos múltiplo de 9
             if (myList.Count % 9 != 0)
