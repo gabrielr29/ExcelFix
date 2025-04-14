@@ -145,6 +145,7 @@
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "PrincipalMenu";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ExcelFix";

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using NPOI.SS.UserModel;
@@ -486,15 +487,35 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        private static int CalculateHeightForCell(string texto, short fontIndex, short fontSize)
+        public static string CopyExcelFile(string rutaArchivoOrigen, string rutaDirectorioDestino)
         {
-            // Lógica para calcular la altura necesaria en función del texto y la fuente
-            // Puedes usar la clase Graphics para medir el texto
-            using (Graphics graphics = Graphics.FromImage(new Bitmap(1, 1)))
+            try
             {
-                Font font = new Font(System.Drawing.FontFamily.GenericSansSerif, fontSize); // Puedes ajustar la fuente
-                SizeF textSize = graphics.MeasureString(texto, font);
-                return (int)textSize.Height;
+                // Obtener la información del archivo original
+                FileInfo archivoOrigen = new FileInfo(rutaArchivoOrigen);
+                string nombreArchivo = Path.GetFileNameWithoutExtension(rutaArchivoOrigen);
+                string extensionArchivo = archivoOrigen.Extension;
+
+                // Obtener la fecha y hora actual y formatearla para el nombre del archivo
+                string fechaHoraActual = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+                // Eliminar caracteres no válidos para nombres de archivo en Windows
+                string nombreArchivoSeguro = Regex.Replace(nombreArchivo, @"[<>:""/\\|?*]", "_");
+
+                // Construir el nombre del archivo de destino
+                string nombreArchivoDestino = $"{nombreArchivoSeguro}_{fechaHoraActual}{extensionArchivo}";
+                string rutaArchivoDestino = Path.Combine(rutaDirectorioDestino, nombreArchivoDestino);
+
+                // Copiar el archivo
+                File.Copy(rutaArchivoOrigen, rutaArchivoDestino);
+
+                Console.WriteLine($"Archivo copiado exitosamente a: {rutaArchivoDestino}");
+                return rutaArchivoDestino;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al crear la copia del archivo: {ex.Message}");
+                return null;
             }
         }
 

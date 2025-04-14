@@ -148,15 +148,14 @@
             Controls.Add(executeButton);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ExcelFix";
+            FormClosing += FormBankFormatFixer_FormClosing;
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
-
-            this.FormClosing += FormBankFormatFixer_FormClosing;
-
         }
 
         #endregion

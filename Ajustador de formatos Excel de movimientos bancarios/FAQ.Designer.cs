@@ -82,6 +82,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             Controls.Add(FAQRichTextBox);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            MaximizeBox = false;
             Name = "FAQ";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "FAQ";

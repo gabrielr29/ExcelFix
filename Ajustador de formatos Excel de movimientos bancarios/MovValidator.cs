@@ -142,8 +142,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 // Mostrar la ruta del archivo en un cuadro de texto o donde sea necesario
                 FileNameTextBox.Text = fileName;
 
-                // Opcional: Puedes hacer algo con la ruta del archivo aquí
-                // Por ejemplo, puedes leer el contenido del archivo o procesarlo de alguna manera
             }
             else
             {
@@ -277,6 +275,73 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             if (bankMovMountTextBox.Text.Length >= 250 && !char.IsControl(e.KeyChar))
             {
                 e.Handled = true; // Ignorar el carácter ingresado
+            }
+        }
+
+        private void billCodeTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void createCopy_Click(object sender, EventArgs e)
+        {           
+            string directorioDestino = getDestinationPathForCopy();
+
+            if (directorioDestino != null)
+            {
+                // Usar el directorio de destino para crear la copia del archivo Excel
+
+                if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
+                {
+
+                    string rutaArchivoOrigen = rutaArchivoSeleccionado; // Reemplaza con la ruta de tu archivo Excel original
+
+                    string rutaArchivoDestino = getDestinationPathForCopy();
+
+                    if (rutaArchivoDestino != null)
+                    {
+                        MovValidatorFunctions.CopyExcelFile(rutaArchivoOrigen, rutaArchivoDestino);
+                        MessageBox.Show($"Archivo copiado exitosamente a: {rutaArchivoDestino}", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Error al crear la copia del archivo.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+
+                }
+
+                else
+                {
+
+                    MessageBox.Show("Primero debes adjuntar un archivo Excel.", "Archivo no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+                
+            }
+
+            else
+            {
+
+                MessageBox.Show("Debes elegir una dirección válida para la copia.", "Archivo no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+            }
+        }
+
+        public static string getDestinationPathForCopy()
+        {
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult resultado = folderBrowserDialog.ShowDialog();
+
+                if (resultado == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    return folderBrowserDialog.SelectedPath;
+                }
+                else
+                {
+                    MessageBox.Show("Destino no válido o no seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return null;
+                }
             }
         }
     }
