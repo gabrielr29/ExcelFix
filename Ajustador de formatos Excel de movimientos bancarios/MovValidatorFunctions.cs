@@ -7,8 +7,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+
 
 namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 {
@@ -71,11 +73,25 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
                             {
 
-                                DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
-                                string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
+                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+
+                                string fechaValidacionFormateada = "";
+                                ICell fechaValidacionCell = fila.GetCell(1);
+
+                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                {
+                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                }
 
                                 if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
                                 {
@@ -141,11 +157,22 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             if (ingresos == montoBusqueda && egresos == 0)
                             {
                                 
-                                //string fechaFormateada = fecha.ToString("dd/MM/yyyy");
-                                //string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
+                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
 
-                                DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
-                                string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+                                string fechaValidacionFormateada = "";
+                                ICell fechaValidacionCell = fila.GetCell(1);
+
+                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                {
+                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                }
+
                                 string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim();
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
@@ -211,18 +238,27 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && egresosToCompare == 0)
                             {
-                                //DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
-                                //string fechaFormateada = fecha.ToString("dd/MM/yyyy");
-                                //string fechaFormateada = FormatValidationDate(fecha);
-                                //string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
+                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
 
-                                DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
-                                string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
                                 decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
                                 decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+
+                                string fechaValidacionFormateada = "";
+                                ICell fechaValidacionCell = fila.GetCell(1);
+
+                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                {
+                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                }
 
                                 if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
                                 {
@@ -263,6 +299,357 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return resultados;
         }
 
+        /*
+         * 
+         * 
+         * Función actualizada para que considere las coincidencias a partir de los últimos 4 dígitos
+         * o bien los últimos 6, agregando más flexibilidad.
+         * 
+         * 
+         * 
+         */
+
+        public static List<string> SearchByReferenceIII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
+        {
+            List<string> resultados = new List<string>();
+
+            string digitosBusqueda = referenciaBusqueda.Trim().ToLower();
+
+            resultados = forLoopSearchByReferenceIII(startedRowToRevision, rutaArchivo, digitosBusqueda);
+
+            return resultados;
+        }
+
+
+        public static List<string> SearchByReferenceandMountII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
+        {
+            List<string> resultados = new List<string>();
+
+            string digitosBusqueda = referenciaBusqueda.Trim().ToLower();
+
+            resultados = forLoopSearchByReferenceandMountII(startedRowToRevision, rutaArchivo, digitosBusqueda, montoBusqueda);
+
+            return resultados;
+        }
+
+
+
+        public static List<string> forLoopSearchByReferenceIII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda)
+        {
+            List<string> resultados = new List<string>();
+            ExcelModifyFunctions functions = new ExcelModifyFunctions();
+
+            using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    IWorkbook libro = new XSSFWorkbook(archivo);
+                    ISheet hoja = libro.GetSheetAt(0);
+
+                    for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
+                    {
+                        IRow fila = hoja.GetRow(i);
+                        if (fila != null)
+                        {
+                            string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
+                            ICell fechaCell = fila.GetCell(0);
+                            ICell fechaValidacionCell = fila.GetCell(1);
+                            string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                            decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
+                            string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
+                            string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+
+                            bool coincidenciaUltimosDigitos = false;
+                            if (referenciaCelda.EndsWith(digitosBusqueda))
+                            {
+                                coincidenciaUltimosDigitos = true;
+                            }
+
+                            if (coincidenciaUltimosDigitos && egresosToCompare == 0)
+                            {
+
+                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+
+                                string fechaValidacionFormateada = "";
+
+                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                {
+                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                }
+
+                                string fechaFormateada = "";
+
+                                if (CheckCellType(fechaCell).Equals("Fecha"))
+                                {
+                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fechaCell);
+                                    fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                }
+
+
+                                resultados.Add($"{fechaFormateada}");
+                                resultados.Add($"{fechaValidacionFormateada}");
+                                resultados.Add($"{referenciaCelda}");
+                                resultados.Add($"{descripcion}");
+                                resultados.Add($"{ingresos}");
+                                resultados.Add($"{egresosToCompare}");
+                                resultados.Add($"{numeroFactura}");
+                                resultados.Add($"{codigoCliente}");
+                                resultados.Add($"{i}");
+                            }
+                        }
+                    }
+
+                    if (resultados.Count == 0)
+                    {
+                        resultados.Add("No se encontraron coincidencias con la referencia indicada.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    resultados.Add("Error al buscar por referencia: " + ex.Message);
+                }
+
+
+                return resultados;
+            }
+        }
+
+        public static List<string> forLoopSearchByReferenceandMountII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda, decimal montoBusqueda)
+        {
+            List<string> resultados = new List<string>();
+            ExcelModifyFunctions functions = new ExcelModifyFunctions();
+
+            using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
+            {
+                try
+                {
+                    IWorkbook libro = new XSSFWorkbook(archivo);
+                    ISheet hoja = libro.GetSheetAt(0);
+
+                    for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
+                    {
+                        IRow fila = hoja.GetRow(i);
+                        if (fila != null)
+                        {
+                            string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
+                            ICell fechaCell = fila.GetCell(0);
+                            ICell fechaValidacionCell = fila.GetCell(1);
+                            string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                            decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
+                            string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
+                            string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+
+                            bool coincidenciaUltimosDigitos = false;
+                            if (referenciaCelda.EndsWith(digitosBusqueda))
+                            {
+                                coincidenciaUltimosDigitos = true;
+                            }
+
+                            if (coincidenciaUltimosDigitos && ingresos == montoBusqueda && egresosToCompare == 0)
+                            {
+
+                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+
+                                string fechaValidacionFormateada = "";
+
+                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                {
+                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                }
+
+                                string fechaFormateada = "";
+
+                                if (CheckCellType(fechaCell).Equals("Fecha"))
+                                {
+                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fechaCell);
+                                    fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                }
+                                else
+                                {
+                                    fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                }
+
+
+                                resultados.Add($"{fechaFormateada}");
+                                resultados.Add($"{fechaValidacionFormateada}");
+                                resultados.Add($"{referenciaCelda}");
+                                resultados.Add($"{descripcion}");
+                                resultados.Add($"{ingresos}");
+                                resultados.Add($"{egresosToCompare}");
+                                resultados.Add($"{numeroFactura}");
+                                resultados.Add($"{codigoCliente}");
+                                resultados.Add($"{i}");
+                            }
+                        }
+                    }
+
+                    if (resultados.Count == 0)
+                    {
+                        resultados.Add("No se encontraron coincidencias con la referencia indicada.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    resultados.Add("Error al buscar por referencia: " + ex.Message);
+                }
+
+
+                return resultados;
+            }
+        }
+
+        // Mucha redundancia, hay que mejorarla
+        // Por retirar, una vez se valide la calidad de las mejoras implementadas
+        public static List<string> SearchByReferenceII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
+        {
+            List<string> resultados = new List<string>();
+
+            string referenciaBusquedaLower = referenciaBusqueda.Trim().ToLower();
+
+            string DigitosBusqueda = "";
+
+            int digitos = 0;
+
+            if (referenciaBusquedaLower.Length == 6)
+            {
+                DigitosBusqueda = referenciaBusquedaLower.Substring(referenciaBusquedaLower.Length - 6);
+                digitos = 6;
+            }
+            else if (referenciaBusquedaLower.Length == 4)
+            {
+                DigitosBusqueda = referenciaBusquedaLower.Substring(referenciaBusquedaLower.Length - 4);
+                digitos = 4;
+            }
+            else
+            {
+                DigitosBusqueda = referenciaBusquedaLower;
+                digitos = referenciaBusquedaLower.Length;
+            }
+
+
+            resultados = forLoopSearchByReferenceII(startedRowToRevision, referenciaBusquedaLower, digitos, rutaArchivo, DigitosBusqueda);
+
+            return resultados;
+        }
+
+        // Por retirar, una vez se valide la calidad de las mejoras implementadas
+        public static List<string> forLoopSearchByReferenceII(int startedRowToRevision,string referenciaBusquedaLower, int digitos, string rutaArchivo, string digitosBusqueda)
+        {
+            List<string> resultados = new List<string>();
+            ExcelModifyFunctions functions = new ExcelModifyFunctions();
+
+            using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
+            {
+                if (digitos >= 4 && digitos <= 6)
+                {
+                    try
+                    {
+                        IWorkbook libro = new XSSFWorkbook(archivo);
+                        ISheet hoja = libro.GetSheetAt(0);
+
+                        for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
+                        {
+                            IRow fila = hoja.GetRow(i);
+                            if (fila != null)
+                            {
+                                string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                                decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
+                                ICell fechaCell = fila.GetCell(0);
+                                ICell fechaValidacionCell = fila.GetCell(1);
+                                string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                                decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
+                                string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
+                                string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+
+                                bool coincidenciaUltimosDigitos = false;
+                                if (referenciaCelda.Length >= digitos && referenciaCelda.EndsWith(digitosBusqueda))
+                                {
+                                    coincidenciaUltimosDigitos = true;
+                                }
+
+                                if (coincidenciaUltimosDigitos && egresosToCompare == 0)
+                                {
+
+                                    //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                    //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
+
+                                    string fechaValidacionFormateada = "";
+                                   
+                                    if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
+                                    {
+                                        DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
+                                        fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
+                                    }
+                                    else
+                                    {
+                                        fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    }
+                                                                                                            
+                                    string fechaFormateada = "";
+
+                                    if (CheckCellType(fechaCell).Equals("Fecha"))
+                                    {
+                                        DateTime fecha = functions.ObtenerValorCeldaFecha(fechaCell);
+                                        fechaFormateada = fecha.ToString("dd/MM/yyyy");
+                                    }
+                                    else
+                                    {
+                                        fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                    }
+
+
+                                    resultados.Add($"{fechaFormateada}");
+                                    resultados.Add($"{fechaValidacionFormateada}");
+                                    resultados.Add($"{referenciaCelda}");
+                                    resultados.Add($"{descripcion}");
+                                    resultados.Add($"{ingresos}");
+                                    resultados.Add($"{egresosToCompare}");
+                                    resultados.Add($"{numeroFactura}");
+                                    resultados.Add($"{codigoCliente}");
+                                    resultados.Add($"{i}");
+                                }
+                            }
+                        }
+
+                        if (resultados.Count == 0)
+                        {
+                            resultados.Add("No se encontraron coincidencias con la referencia indicada.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        resultados.Add("Error al buscar por referencia: " + ex.Message);
+                    }
+                }
+                else
+                {
+                    resultados = SearchByReference(rutaArchivo, startedRowToRevision, referenciaBusquedaLower);
+                }
+
+                return resultados;
+            }
+        }
+
+       
+
         public static void ReplaceDataGridViewValues(DataGridView dataGridView1, List<string> myList)
         {
             // Validación: Asegurar que la lista tenga una cantidad de elementos múltiplo de 9
@@ -290,6 +677,35 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
 
             
+        }
+
+        public static void ColorRowsBySecondColumnValue(DataGridView dataGridView)
+        {
+            if (dataGridView == null || dataGridView.Rows.Count == 0)
+            {
+                return; // Do nothing if the DataGridView is null or has no rows
+            }
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                // Check if the second column (index 1) has a value
+                if (row.Cells.Count > 1 && row.Cells[1].Value != null && !string.IsNullOrEmpty(row.Cells[1].Value.ToString().Trim()))
+                {
+                    // Change the background color of the entire row
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        cell.Style.BackColor = Color.Aquamarine;
+                    }
+                }
+                else
+                {
+                    // Optional: You can restore the default background color if the condition is not met
+                    // foreach (DataGridViewCell cell in row.Cells)
+                    // {
+                    //     cell.Style.BackColor = dataGridView.DefaultCellStyle.BackColor;
+                    // }
+                }
+            }
         }
 
         public static void UpdateCellsByRow(string rutaArchivo, int numeroFila, DateTime fechaValidacion, string numeroFactura, string codigoCliente)
@@ -413,42 +829,42 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         // Función para clonar el estilo y aplicar el formato "General", manteniendo bordes y otros atributos pero añadiendo color azul
-        private static ICellStyle CloneSyleAndFormat(IWorkbook libro, ICellStyle estiloOriginal, IDataFormat formato, bool generalOrOriginal)
+        private static ICellStyle CloneSyleAndFormat(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
         {
-            ICellStyle nuevoEstilo = libro.CreateCellStyle();
+            ICellStyle newStyle = libro.CreateCellStyle();
 
-            if (estiloOriginal != null)
+            if (OriginalStyle != null)
             {
                 // Copia los colores de borde
-                nuevoEstilo.BottomBorderColor = estiloOriginal.BottomBorderColor;
-                nuevoEstilo.TopBorderColor = estiloOriginal.TopBorderColor;
-                nuevoEstilo.LeftBorderColor = estiloOriginal.LeftBorderColor;
-                nuevoEstilo.RightBorderColor = estiloOriginal.RightBorderColor;
+                newStyle.BottomBorderColor = OriginalStyle.BottomBorderColor;
+                newStyle.TopBorderColor = OriginalStyle.TopBorderColor;
+                newStyle.LeftBorderColor = OriginalStyle.LeftBorderColor;
+                newStyle.RightBorderColor = OriginalStyle.RightBorderColor;
 
                 // Copia alineación, fuente, etc.
-                nuevoEstilo.Alignment = estiloOriginal.Alignment;
-                nuevoEstilo.VerticalAlignment = estiloOriginal.VerticalAlignment;
-                nuevoEstilo.WrapText = estiloOriginal.WrapText;
-                nuevoEstilo.FillBackgroundColor = estiloOriginal.FillBackgroundColor;
-                nuevoEstilo.ShrinkToFit = estiloOriginal.ShrinkToFit;
-                nuevoEstilo.Indention = estiloOriginal.Indention;
-                nuevoEstilo.Rotation = estiloOriginal.Rotation;
+                newStyle.Alignment = OriginalStyle.Alignment;
+                newStyle.VerticalAlignment = OriginalStyle.VerticalAlignment;
+                newStyle.WrapText = OriginalStyle.WrapText;
+                newStyle.FillBackgroundColor = OriginalStyle.FillBackgroundColor;
+                newStyle.ShrinkToFit = OriginalStyle.ShrinkToFit;
+                newStyle.Indention = OriginalStyle.Indention;
+                newStyle.Rotation = OriginalStyle.Rotation;
 
                 // Sobreescribiendo sombreado al color necesario
-                nuevoEstilo.FillPattern = FillPattern.SolidForeground;
-                nuevoEstilo.FillForegroundColor = IndexedColors.LightBlue.Index;
+                newStyle.FillPattern = FillPattern.SolidForeground;
+                newStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
 
                 // Copia los bordes
-                nuevoEstilo.BorderBottom = estiloOriginal.BorderBottom;
-                nuevoEstilo.BorderTop = estiloOriginal.BorderTop;
-                nuevoEstilo.BorderLeft = estiloOriginal.BorderLeft;
-                nuevoEstilo.BorderRight = estiloOriginal.BorderRight;
+                newStyle.BorderBottom = OriginalStyle.BorderBottom;
+                newStyle.BorderTop = OriginalStyle.BorderTop;
+                newStyle.BorderLeft = OriginalStyle.BorderLeft;
+                newStyle.BorderRight = OriginalStyle.BorderRight;
             }
 
             // Asigna el formato "General" o el formato original
-            nuevoEstilo.DataFormat = generalOrOriginal ? formato.GetFormat("General") : estiloOriginal.DataFormat;
+            newStyle.DataFormat = generalOrOriginal ? formato.GetFormat("General") : OriginalStyle.DataFormat;
 
-            return nuevoEstilo;
+            return newStyle;
         }
 
         public static string CheckCellType(ICell celda)
@@ -519,6 +935,73 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        public static bool isRowFilledwithColor(string rutaArchivo, int numeroFila, int cantidadCeldasARevisar)
+        {
+            try
+            {
+                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
+                {
+                    XSSFWorkbook libro = new XSSFWorkbook(archivo);
+                    ISheet hoja = libro.GetSheetAt(0);
+                    IRow fila = hoja.GetRow(numeroFila); // Las filas en NPOI son 0-based
+
+                    if (fila != null)
+                    {
+                        for (int i = 0; i < cantidadCeldasARevisar; i++)
+                        {
+                            ICell celda = fila.GetCell(i);
+                            if (celda != null)
+                            {
+                                ICellStyle estilo = celda.CellStyle;
+                                if (estilo != null)
+                                {
+                                    FillPattern fillPattern = estilo.FillPattern;
+
+                                    // Si hay un patrón de relleno distinto a "ninguno", consideramos que tiene color
+                                    if (fillPattern != FillPattern.NoFill)
+                                    {
+                                        return true;
+                                    }
+                                    else
+                                    {
+                                        // Si no hay patrón, verificamos el color de fondo
+                                        XSSFColor backgroundColor = (XSSFColor)estilo.FillForegroundColorColor;
+                                        if (backgroundColor != null)
+                                        {
+                                            // Comparamos con el color de fondo predeterminado (puede variar, pero blanco es común)
+                                            byte[] defaultBackgroundRGB = new byte[] { 255, 255, 255 };
+                                            byte[] backgroundColorRGB = backgroundColor.RGB;
+
+                                            // Si el color RGB no es nulo y no es igual al blanco predeterminado
+                                            if (backgroundColorRGB != null && !backgroundColorRGB.SequenceEqual(defaultBackgroundRGB))
+                                            {
+                                                return true;
+                                            }
+                                            else if (backgroundColor.Indexed != HSSFColor.Automatic.Index)
+                                            {
+                                                // Verificamos si el índice del color no es el automático
+                                                return true;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    return false;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+            catch (IOException ex)
+            {
+                return false;
+            }
+            return false;
+        }
 
     }
 }

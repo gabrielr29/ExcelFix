@@ -46,9 +46,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 textBoxPath.Text = rutaArchivo;
                 textBoxFileName.Text = fileName;
 
-
-                // Opcional: Puedes hacer algo con la ruta del archivo aquí
-                // Por ejemplo, puedes leer el contenido del archivo o procesarlo de alguna manera
             }
             else
             {

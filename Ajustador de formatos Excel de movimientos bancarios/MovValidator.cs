@@ -39,7 +39,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     if (string.IsNullOrWhiteSpace(ReferenceNumberTextBox.Text) && string.IsNullOrWhiteSpace(bankMovMountTextBox.Text))
                     {
 
-                        MessageBox.Show("Ambos campos no pueden estar vacío.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Ambos campos no pueden estar vacíos.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
 
                     }
@@ -54,23 +54,23 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     else if (!string.IsNullOrWhiteSpace(ReferenceNumberTextBox.Text) && string.IsNullOrWhiteSpace(bankMovMountTextBox.Text))
                     {
 
-                        myList = MovValidatorFunctions.SearchByReference(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text);
+                        myList = MovValidatorFunctions.SearchByReferenceIII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text);
 
                     }
 
                     else
                     {
 
-                        // Lógica para cargar y filtrar el Excel usando la ruta                    
+                        // Filtrar por monto y referencia, actualizado para considerar referencias cortas                   
 
-                        myList = MovValidatorFunctions.SearchByReferenceAndMount(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text));
-
+                        myList = MovValidatorFunctions.SearchByReferenceandMountII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text));
+                   
 
                     }
 
-
+                    
                     MovValidatorFunctions.ReplaceDataGridViewValues(dataGridView1, myList);
-
+                    MovValidatorFunctions.ColorRowsBySecondColumnValue(dataGridView1);
                 }
 
 
@@ -188,12 +188,23 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         DataGridViewRow filaSeleccionada = dataGridView1.SelectedRows[0];
 
                         string valor = filaSeleccionada.Cells[8].Value?.ToString();
+                        string validationDateDataGridView = filaSeleccionada.Cells[1].Value?.ToString();
 
-
+                        
                         if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text) && !string.IsNullOrWhiteSpace(clientCodeTextBox.Text))
                         {
-                            MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
-                            SearchBankMovesProcess();
+                            if (MovValidatorFunctions.isRowFilledwithColor(rutaArchivoSeleccionado, int.Parse(valor), 4) || !string.IsNullOrEmpty(validationDateDataGridView))
+                            {
+                                
+                                MessageBox.Show("Este movimiento ya ha sido validado el " + validationDateDataGridView, "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                            }
+                            else
+                            {
+                                MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
+                                SearchBankMovesProcess();
+                            }
+
                         }
                         else if (string.IsNullOrWhiteSpace(clientCodeTextBox.Text))
                         {
