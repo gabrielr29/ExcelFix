@@ -201,8 +201,24 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             }
                             else
                             {
-                                MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
+                                DateTime fechaSeleccionada;
+
+                                try
+                                {
+                                    fechaSeleccionada = Convert.ToDateTime(filaSeleccionada.Cells[0].Value);
+                                    // Ahora 'fechaSeleccionada' es de tipo DateTime y contiene la fecha del DataGridView.
+                                }
+                                catch (FormatException ex)
+                                {
+                                    // Manejar el caso en que el valor no es una fecha válida.
+                                    MessageBox.Show($"El valor '{filaSeleccionada.Cells[0].Value}' no tiene un formato de fecha válido.", "Error de formato");
+                                    fechaSeleccionada = DateTime.MinValue; // O asigna otro valor por defecto.
+                                }
+
+                                MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), fechaSeleccionada, DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
+                                
                                 SearchBankMovesProcess();
+                                                                
                             }
 
                         }
@@ -232,10 +248,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             {
                 MessageBox.Show("Primero debes adjuntar un archivo Excel.", "Archivo no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-
-
-
-
 
         }
 

@@ -17,11 +17,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
     internal class MovValidatorFunctions
     {
 
-        public static void UploadAndFilterExcel(string rutaArchivoSeleccionado)
-        {
-
-        }
-
         private static string FormatValidationDate(DateTime validationDate)
         {
             if (!validationDate.Equals(DateTime.MinValue))
@@ -300,13 +295,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         /*
-         * 
-         * 
          * Función actualizada para que considere las coincidencias a partir de los últimos 4 dígitos
          * o bien los últimos 6, agregando más flexibilidad.
-         * 
-         * 
-         * 
          */
 
         public static List<string> SearchByReferenceIII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
@@ -699,16 +689,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 }
                 else
                 {
-                    // Optional: You can restore the default background color if the condition is not met
-                    // foreach (DataGridViewCell cell in row.Cells)
-                    // {
-                    //     cell.Style.BackColor = dataGridView.DefaultCellStyle.BackColor;
-                    // }
+
                 }
             }
         }
 
-        public static void UpdateCellsByRow(string rutaArchivo, int numeroFila, DateTime fechaValidacion, string numeroFactura, string codigoCliente)
+        public static void UpdateCellsByRow(string rutaArchivo, int numeroFila, DateTime fecha, DateTime fechaValidacion, string billNumer, string codigoCliente)
         {
             try
             {
@@ -719,97 +705,98 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                     IDataFormat formato = libro.CreateDataFormat();
 
-                    // Estilo para formato de fecha dd/MM/yyyy
-                    ICellStyle estiloFecha = libro.CreateCellStyle();
-                    
-                    estiloFecha.FillPattern = FillPattern.SolidForeground;
-                    estiloFecha.FillForegroundColor = IndexedColors.LightBlue.Index; // Color azul
-                    estiloFecha.DataFormat = formato.GetFormat("dd/MM/yyyy");
-
                     //Estilo con formato general y coloreado Azul
 
                     IRow fila = hoja.GetRow(numeroFila);
                     if (fila == null)
                         fila = hoja.CreateRow(numeroFila);
 
+                    //Fecha (columna 0)
+                    ICell dateCell = fila.GetCell(0) ?? fila.CreateCell(1);
+                    dateCell.SetCellValue(fecha.Date);
+                    dateCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
+                    dateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
+                    dateCell.CellStyle.WrapText = true;
+
                     // Fecha de Validación (columna 1)
-                    ICell celdaFechaValidacion = fila.GetCell(1) ?? fila.CreateCell(1);
-                    celdaFechaValidacion.SetCellValue(fechaValidacion.Date);
-                    estiloFecha.BorderLeft = celdaFechaValidacion.CellStyle.BorderLeft;
-                    celdaFechaValidacion.CellStyle = estiloFecha;
+                    ICell validationDateCell = fila.GetCell(1) ?? fila.CreateCell(1);
+                    validationDateCell.SetCellValue(fechaValidacion.Date);
+                    validationDateCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
+                    validationDateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
+                    validationDateCell.CellStyle.WrapText = true;
 
                     // Número de Factura (columna 7)
-                    ICell celdaFactura = fila.GetCell(7) ?? fila.CreateCell(7);
-                    celdaFactura.SetCellValue(numeroFactura);
-                    celdaFactura.CellStyle = CloneSyleAndFormat(libro, celdaFactura.CellStyle, formato, true);
-                    celdaFactura.CellStyle.WrapText = true;
+                    ICell billCell = fila.GetCell(7) ?? fila.CreateCell(7);
+                    billCell.SetCellValue(billNumer);
+                    billCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
+                    billCell.CellStyle.WrapText = true;
 
                     // Código de Cliente (columna 8)
-                    ICell celdaCliente = fila.GetCell(8) ?? fila.CreateCell(8);
-                    celdaCliente.SetCellValue(codigoCliente);
-                    celdaCliente.CellStyle = CloneSyleAndFormat(libro, celdaCliente.CellStyle, formato, true);
-                    celdaCliente.CellStyle.WrapText = true;
+                    ICell clientCell = fila.GetCell(8) ?? fila.CreateCell(8);
+                    clientCell.SetCellValue(codigoCliente);
+                    clientCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
+                    clientCell.CellStyle.WrapText = true;
 
                     //Celdas restantes(columna 6, 5, 4, 3, 2, 0)
-                    ICell celdaFechaOriginal = fila.GetCell(0) ?? fila.CreateCell(0);
-                    celdaFechaOriginal.CellStyle = celdaFechaValidacion.CellStyle;
+                    ICell originalDateCell = fila.GetCell(0) ?? fila.CreateCell(0);
+                    originalDateCell.CellStyle = validationDateCell.CellStyle;
                     
-                    ICell celdaReferencia = fila.GetCell(2) ?? fila.CreateCell(2);
-                    celdaReferencia.CellStyle = CloneSyleAndFormat(libro, celdaReferencia.CellStyle, formato, false);
+                    ICell referenceCell = fila.GetCell(2) ?? fila.CreateCell(2);
+                    referenceCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
 
-                    ICell celdaDescripcion = fila.GetCell(3) ?? fila.CreateCell(3);
-                    celdaDescripcion.CellStyle = CloneSyleAndFormat(libro, celdaDescripcion.CellStyle, formato, false);
+                    ICell descriptionCell = fila.GetCell(3) ?? fila.CreateCell(3);
+                    descriptionCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
 
-                    ICell celdaIngresos = fila.GetCell(4) ?? fila.CreateCell(4);
-                    celdaIngresos.CellStyle = CloneSyleAndFormat(libro, celdaIngresos.CellStyle, formato, false);
+                    ICell incomesCell = fila.GetCell(4) ?? fila.CreateCell(4);
+                    incomesCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
 
-                    ICell celdaEgresos = fila.GetCell(5) ?? fila.CreateCell(5);
+                    ICell expensesCell = fila.GetCell(5) ?? fila.CreateCell(5);
 
-                    celdaEgresos.CellStyle = CloneSyleAndFormat(libro, celdaEgresos.CellStyle, formato, false);
+                    expensesCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, expensesCell.CellStyle, formato, false);
 
-                    ICell celdaSaldo = fila.GetCell(6) ?? fila.CreateCell(6);
+                    ICell balanceCell = fila.GetCell(6) ?? fila.CreateCell(6);
 
-                    celdaSaldo.CellStyle = CloneSyleAndFormat(libro, celdaSaldo.CellStyle, formato, false);
+                    balanceCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
 
 
                     //Ajustando el tamaño de la fila para que entren los registros de código de factura
                     // Calcular la altura manualmente *solo si hace falta
-                    if (numeroFactura.Length >= 28 && numeroFactura.Length <= 58)
+                    if (billNumer.Length >= 28 && billNumer.Length <= 58)
                     {
-                        int alturaNecesaria = 40;
-                        fila.HeightInPoints = alturaNecesaria;
+                        int necesaryHeight = 40;
+                        fila.HeightInPoints = necesaryHeight;
                     }
-                    else if(numeroFactura.Length >= 59 && numeroFactura.Length <= 89)
+                    else if(billNumer.Length >= 59 && billNumer.Length <= 89)
                     {
                         int alturaNecesaria = 60;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 90 && numeroFactura.Length <= 120)
+                    else if (billNumer.Length >= 90 && billNumer.Length <= 120)
                     {
                         int alturaNecesaria = 80;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 121 && numeroFactura.Length <= 151)
+                    else if (billNumer.Length >= 121 && billNumer.Length <= 151)
                     {
                         int alturaNecesaria = 100;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 152 && numeroFactura.Length <= 182)
+                    else if (billNumer.Length >= 152 && billNumer.Length <= 182)
                     {
                         int alturaNecesaria = 120;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 183 && numeroFactura.Length <= 213)
+                    else if (billNumer.Length >= 183 && billNumer.Length <= 213)
                     {
                         int alturaNecesaria = 140;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 214 && numeroFactura.Length <= 234)
+                    else if (billNumer.Length >= 214 && billNumer.Length <= 234)
                     {
                         int alturaNecesaria = 160;
                         fila.HeightInPoints = alturaNecesaria;
                     }
-                    else if (numeroFactura.Length >= 235 && numeroFactura.Length <= 255)
+                    else if (billNumer.Length >= 235 && billNumer.Length <= 255)
                     {
                         int alturaNecesaria = 180;
                         fila.HeightInPoints = alturaNecesaria;
@@ -829,7 +816,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         // Función para clonar el estilo y aplicar el formato "General", manteniendo bordes y otros atributos pero añadiendo color azul
-        private static ICellStyle CloneSyleAndFormat(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
+        private static ICellStyle CloneSyleAndFormatAndAddColor(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
         {
             ICellStyle newStyle = libro.CreateCellStyle();
 
