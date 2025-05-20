@@ -63,7 +63,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                         // Filtrar por monto y referencia, actualizado para considerar referencias cortas                   
 
-                        myList = MovValidatorFunctions.SearchByReferenceandMountII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text));
+                        myList = MovValidatorFunctions.SearchByReferenceandAmountII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text));
                    
 
                     }

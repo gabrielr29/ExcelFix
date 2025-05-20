@@ -212,9 +212,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             //Insertando la información de fechas
 
-                            //int inverseIndex = columna1Hoja1.Count;
-                            //int inverseIndex2 = columna1Hoja2.Count;
-
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 0, 0, columna1Hoja1);
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 1, 0, columna2Hoja1);
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 2, 0, columna3Hoja1);
@@ -228,33 +225,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 3, 1, columna4Hoja2);
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 4, 1, columna5Hoja2);
                             ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 5, 1, columna6Hoja2);
-
-                            //for (int i = 0; i < columna1Hoja1.Count; i++)
-                            //{
-                            //    inverseIndex = inverseIndex - 1;
-
-                            //    ChangeCellText(ExcelFilePath.Text, i, 0, columna1Hoja1[inverseIndex], 0);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 1, columna2Hoja1[inverseIndex], 0);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 2, columna3Hoja1[inverseIndex], 0);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 3, columna4Hoja1[inverseIndex], 0);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 4, columna5Hoja1[inverseIndex], 0);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 5, columna6Hoja1[inverseIndex], 0);
-
-                            //}
-
-                            //for (int i = 0; i < columna1Hoja2.Count; i++)
-                            //{
-                            //    inverseIndex2 = inverseIndex2 - 1;
-
-                            //    ChangeCellText(ExcelFilePath.Text, i, 0, columna1Hoja2[inverseIndex2], 1);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 1, columna2Hoja2[inverseIndex2], 1);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 2, columna3Hoja2[inverseIndex2], 1);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 3, columna4Hoja2[inverseIndex2], 1);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 4, columna5Hoja2[inverseIndex2], 1);
-                            //    ChangeCellText(ExcelFilePath.Text, i, 5, columna6Hoja2[inverseIndex2], 1);
-
-                            //}
-
 
                             //Cambiando el orden de los movimientos (HOJA 1 Y 2)
 

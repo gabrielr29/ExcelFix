@@ -30,6 +30,15 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExcelFixForm2));
             dataGridView1 = new DataGridView();
+            DateColumn = new DataGridViewTextBoxColumn();
+            ValidationDate = new DataGridViewTextBoxColumn();
+            ReferenceNumber = new DataGridViewTextBoxColumn();
+            Description = new DataGridViewTextBoxColumn();
+            Incomes = new DataGridViewTextBoxColumn();
+            Expenses = new DataGridViewTextBoxColumn();
+            BillNumber = new DataGridViewTextBoxColumn();
+            CostumerCode = new DataGridViewTextBoxColumn();
+            NRow = new DataGridViewTextBoxColumn();
             searchMovButton = new Button();
             bankMovMountTextBox = new TextBox();
             FileNameTextBox = new TextBox();
@@ -45,15 +54,6 @@
             button2 = new Button();
             label3 = new Label();
             createCopy = new Button();
-            DateColumn = new DataGridViewTextBoxColumn();
-            ValidationDate = new DataGridViewTextBoxColumn();
-            ReferenceNumber = new DataGridViewTextBoxColumn();
-            Description = new DataGridViewTextBoxColumn();
-            Incomes = new DataGridViewTextBoxColumn();
-            Expenses = new DataGridViewTextBoxColumn();
-            BillNumber = new DataGridViewTextBoxColumn();
-            CostumerCode = new DataGridViewTextBoxColumn();
-            NRow = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -73,6 +73,69 @@
             dataGridView1.Size = new Size(1275, 227);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // DateColumn
+            // 
+            DateColumn.FillWeight = 78.23603F;
+            DateColumn.HeaderText = "Fecha";
+            DateColumn.Name = "DateColumn";
+            DateColumn.ReadOnly = true;
+            // 
+            // ValidationDate
+            // 
+            ValidationDate.FillWeight = 78.23603F;
+            ValidationDate.HeaderText = "Fecha Validación";
+            ValidationDate.Name = "ValidationDate";
+            ValidationDate.ReadOnly = true;
+            // 
+            // ReferenceNumber
+            // 
+            ReferenceNumber.FillWeight = 78.23603F;
+            ReferenceNumber.HeaderText = "Referencia";
+            ReferenceNumber.Name = "ReferenceNumber";
+            ReferenceNumber.ReadOnly = true;
+            // 
+            // Description
+            // 
+            Description.FillWeight = 274.111664F;
+            Description.HeaderText = "Descripción";
+            Description.Name = "Description";
+            Description.ReadOnly = true;
+            // 
+            // Incomes
+            // 
+            Incomes.FillWeight = 78.23603F;
+            Incomes.HeaderText = "Ingresos";
+            Incomes.Name = "Incomes";
+            Incomes.ReadOnly = true;
+            // 
+            // Expenses
+            // 
+            Expenses.FillWeight = 78.23603F;
+            Expenses.HeaderText = "Egresos";
+            Expenses.Name = "Expenses";
+            Expenses.ReadOnly = true;
+            // 
+            // BillNumber
+            // 
+            BillNumber.FillWeight = 78.23603F;
+            BillNumber.HeaderText = "Número de factura";
+            BillNumber.Name = "BillNumber";
+            BillNumber.ReadOnly = true;
+            // 
+            // CostumerCode
+            // 
+            CostumerCode.FillWeight = 78.23603F;
+            CostumerCode.HeaderText = "Codigo de cliente";
+            CostumerCode.Name = "CostumerCode";
+            CostumerCode.ReadOnly = true;
+            // 
+            // NRow
+            // 
+            NRow.FillWeight = 78.23603F;
+            NRow.HeaderText = "N° Fila";
+            NRow.Name = "NRow";
+            NRow.ReadOnly = true;
             // 
             // searchMovButton
             // 
@@ -134,7 +197,7 @@
             billCodeTextBox.Location = new Point(372, 474);
             billCodeTextBox.Name = "billCodeTextBox";
             billCodeTextBox.Size = new Size(280, 26);
-            billCodeTextBox.TabIndex = 6;
+            billCodeTextBox.TabIndex = 4;
             billCodeTextBox.TextChanged += billCodeTextBox_TextChanged;
             billCodeTextBox.KeyPress += billCodeTextBox_KeyPress;
             // 
@@ -154,7 +217,7 @@
             updateRowButton.Location = new Point(523, 519);
             updateRowButton.Name = "updateRowButton";
             updateRowButton.Size = new Size(276, 49);
-            updateRowButton.TabIndex = 7;
+            updateRowButton.TabIndex = 6;
             updateRowButton.Text = "Actualizar ";
             updateRowButton.UseVisualStyleBackColor = true;
             updateRowButton.Click += updateRowButton_Click;
@@ -233,69 +296,6 @@
             createCopy.Text = "Crear Copia de Seguridad";
             createCopy.UseVisualStyleBackColor = true;
             createCopy.Click += createCopy_Click;
-            // 
-            // DateColumn
-            // 
-            DateColumn.FillWeight = 78.23603F;
-            DateColumn.HeaderText = "Fecha";
-            DateColumn.Name = "DateColumn";
-            DateColumn.ReadOnly = true;
-            // 
-            // ValidationDate
-            // 
-            ValidationDate.FillWeight = 78.23603F;
-            ValidationDate.HeaderText = "Fecha Validación";
-            ValidationDate.Name = "ValidationDate";
-            ValidationDate.ReadOnly = true;
-            // 
-            // ReferenceNumber
-            // 
-            ReferenceNumber.FillWeight = 78.23603F;
-            ReferenceNumber.HeaderText = "Referencia";
-            ReferenceNumber.Name = "ReferenceNumber";
-            ReferenceNumber.ReadOnly = true;
-            // 
-            // Description
-            // 
-            Description.FillWeight = 274.111664F;
-            Description.HeaderText = "Descripción";
-            Description.Name = "Description";
-            Description.ReadOnly = true;
-            // 
-            // Incomes
-            // 
-            Incomes.FillWeight = 78.23603F;
-            Incomes.HeaderText = "Ingresos";
-            Incomes.Name = "Incomes";
-            Incomes.ReadOnly = true;
-            // 
-            // Expenses
-            // 
-            Expenses.FillWeight = 78.23603F;
-            Expenses.HeaderText = "Egresos";
-            Expenses.Name = "Expenses";
-            Expenses.ReadOnly = true;
-            // 
-            // BillNumber
-            // 
-            BillNumber.FillWeight = 78.23603F;
-            BillNumber.HeaderText = "Número de factura";
-            BillNumber.Name = "BillNumber";
-            BillNumber.ReadOnly = true;
-            // 
-            // CostumerCode
-            // 
-            CostumerCode.FillWeight = 78.23603F;
-            CostumerCode.HeaderText = "Codigo de cliente";
-            CostumerCode.Name = "CostumerCode";
-            CostumerCode.ReadOnly = true;
-            // 
-            // NRow
-            // 
-            NRow.FillWeight = 78.23603F;
-            NRow.HeaderText = "N° Fila";
-            NRow.Name = "NRow";
-            NRow.ReadOnly = true;
             // 
             // ExcelFixForm2
             // 

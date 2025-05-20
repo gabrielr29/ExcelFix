@@ -68,9 +68,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
                             {
 
-                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
-                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
-
                                 string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
                                 string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
                                 string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
@@ -311,7 +308,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
 
-        public static List<string> SearchByReferenceandMountII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
+        public static List<string> SearchByReferenceandAmountII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
         {
             List<string> resultados = new List<string>();
 
