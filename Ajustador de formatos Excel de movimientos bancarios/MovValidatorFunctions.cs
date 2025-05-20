@@ -711,27 +711,31 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     //Fecha (columna 0)
                     ICell dateCell = fila.GetCell(0) ?? fila.CreateCell(1);
                     dateCell.SetCellValue(fecha.Date);
-                    dateCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
+                    dateCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
+                    //CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
                     dateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
                     dateCell.CellStyle.WrapText = true;
 
                     // Fecha de Validación (columna 1)
                     ICell validationDateCell = fila.GetCell(1) ?? fila.CreateCell(1);
                     validationDateCell.SetCellValue(fechaValidacion.Date);
-                    validationDateCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
+                    validationDateCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
+                    //CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
                     validationDateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
                     validationDateCell.CellStyle.WrapText = true;
 
                     // Número de Factura (columna 7)
                     ICell billCell = fila.GetCell(7) ?? fila.CreateCell(7);
                     billCell.SetCellValue(billNumer);
-                    billCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
+                    billCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
+                    //CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
                     billCell.CellStyle.WrapText = true;
 
                     // Código de Cliente (columna 8)
                     ICell clientCell = fila.GetCell(8) ?? fila.CreateCell(8);
                     clientCell.SetCellValue(codigoCliente);
-                    clientCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
+                    clientCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
+                    //CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
                     clientCell.CellStyle.WrapText = true;
 
                     //Celdas restantes(columna 6, 5, 4, 3, 2, 0)
@@ -739,21 +743,26 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     originalDateCell.CellStyle = validationDateCell.CellStyle;
                     
                     ICell referenceCell = fila.GetCell(2) ?? fila.CreateCell(2);
-                    referenceCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
+                    referenceCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
+                        //CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
 
                     ICell descriptionCell = fila.GetCell(3) ?? fila.CreateCell(3);
-                    descriptionCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
+                    descriptionCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
+                        //CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
 
                     ICell incomesCell = fila.GetCell(4) ?? fila.CreateCell(4);
-                    incomesCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
+                    incomesCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
+                    //CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
 
                     ICell expensesCell = fila.GetCell(5) ?? fila.CreateCell(5);
 
-                    expensesCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, expensesCell.CellStyle, formato, false);
+                    expensesCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro,expensesCell.CellStyle,formato, false);
+                        //CloneSyleAndFormatAndAddColor(libro, expensesCell.CellStyle, formato, false);
 
                     ICell balanceCell = fila.GetCell(6) ?? fila.CreateCell(6);
 
-                    balanceCell.CellStyle = CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
+                    balanceCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
+                    //CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
 
 
                     //Ajustando el tamaño de la fila para que entren los registros de código de factura
@@ -813,7 +822,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         // Función para clonar el estilo y aplicar el formato "General", manteniendo bordes y otros atributos pero añadiendo color azul
-        private static ICellStyle CloneSyleAndFormatAndAddColor(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
+        private static ICellStyle CloneSyleAndFormatAndAddColor2(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
         {
             ICellStyle newStyle = libro.CreateCellStyle();
 
@@ -850,7 +859,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
             return newStyle;
         }
-
         public static string CheckCellType(ICell celda)
         {
             if (celda == null)
