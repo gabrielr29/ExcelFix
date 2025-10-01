@@ -16,6 +16,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
     {
 
         string rutaArchivoSeleccionado = "";
+        FileAccessChecker FileAccessC = new FileAccessChecker();
 
         public ExcelFixForm2()
         {
@@ -28,11 +29,10 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
 
-
             if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
             {
                 //Este if verifica si el archivo está abierto o no. (No se puede procesar estando abierto)
-                if (!functions.IsOpen(rutaArchivoSeleccionado))
+                if (FileAccessC.IsOpen(rutaArchivoSeleccionado))
                 {
                     List<string> myList = new List<string>();
 
@@ -178,7 +178,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
             {
                 //Este if verifica si el archivo está abierto o no. (No se puede procesar estando abierto)
-                if (!functions.IsOpen(rutaArchivoSeleccionado))
+                if (FileAccessC.IsOpen(rutaArchivoSeleccionado))
                 {
 
                     if (dataGridView1.SelectedRows.Count > 0)

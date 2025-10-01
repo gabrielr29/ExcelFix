@@ -21,6 +21,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
     {
 
         FileAccessChecker FileAccessC = new FileAccessChecker();
+        BankFormatsFixerFunctions.Exterior bancoExterior = new BankFormatsFixerFunctions.Exterior();
 
         public void AttachExcelFile(ComboBox BankSelector, TextBox ExcelFilePath)
         {
@@ -329,7 +330,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     }
                     else if (BankSelector.Text.Equals("Exterior (Modificar)"))
                     {
-                        if (ExteriorBankValidator(ExcelFilePath.Text) == 1)
+                        if (bancoExterior.BankValidator(ExcelFilePath.Text) == 1)
                         {
 
                    
@@ -432,7 +433,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         }
-                        else if (ExteriorBankValidator(ExcelFilePath.Text) == 2)
+                        else if (bancoExterior.BankValidator(ExcelFilePath.Text) == 2)
                         {
 
                             MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -650,7 +651,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 //Case 4, especial para Banco Exterior 
                                 else if (caseControlerNegativesPositivesorAll == 4)
                                 {
-                                    string valorString = ObtenerValorCeldaString(celdaOrigen);
+                                    string valorString = getValueCellString(celdaOrigen);
 
                                     if (valorString.Equals('+') || valorString.Equals('-'))
                                     {
@@ -668,7 +669,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 //Case 5, solo texto para Banco Mercantil
                                 else if (caseControlerNegativesPositivesorAll == 5)
                                 {
-                                    string valorString = ObtenerValorCeldaString(celdaOrigen);
+                                    string valorString = getValueCellString(celdaOrigen);
 
                                         celdaDestino.SetCellValue(celdaOrigen.StringCellValue);
     
@@ -1155,8 +1156,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         {
                             DateTime fecha = ObtenerValorCeldaFecha(fila.GetCell(0));
                             DateTime fechaValidacion = ObtenerValorCeldaFecha(fila.GetCell(1));
-                            string referencia = ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower(); // Normalizar referencia
-                            string descripcion = ObtenerValorCeldaString(fila.GetCell(3)).Trim().ToLower(); // Normalizar descripción
+                            string referencia = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar referencia
+                            string descripcion = getValueCellString(fila.GetCell(3)).Trim().ToLower(); // Normalizar descripción
                             decimal ingresos = ObtenerValorCeldaDecimal(fila.GetCell(4));
                             decimal egresos = ObtenerValorCeldaDecimal(fila.GetCell(5));
 
@@ -1217,9 +1218,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(i);
                         if (fila != null)
                         {
-                            string fecha = ObtenerValorCeldaString(fila.GetCell(0));
-                            string referencia = ObtenerValorCeldaString(fila.GetCell(1));
-                            string descripcion = ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower(); // Normalizar referencia
+                            string fecha = getValueCellString(fila.GetCell(0));
+                            string referencia = getValueCellString(fila.GetCell(1));
+                            string descripcion = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar referencia
                             decimal ingresos = ObtenerValorCeldaDecimal(fila.GetCell(3));
                             decimal egresos = ObtenerValorCeldaDecimal(fila.GetCell(4));
 
@@ -1267,7 +1268,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return DateTime.MinValue;
         }
 
-        public string ObtenerValorCeldaString(ICell celda)
+        public static string getValueCellString(ICell celda)
         {
             if (celda != null)
             {
@@ -1491,15 +1492,15 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(0);
                         if (fila != null)
                         {
-                            string fecha = ObtenerValorCeldaString(fila.GetCell(0));
-                            string fechaValidacion = ObtenerValorCeldaString(fila.GetCell(1)).Trim().ToLower();
-                            string referencia = ObtenerValorCeldaString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
-                            string concepto = ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
-                            string saldo = ObtenerValorCeldaString(fila.GetCell(3)).Trim().ToLower();
-                            string monto = ObtenerValorCeldaString(fila.GetCell(4)).Trim().ToLower();
-                            string tipoMov = ObtenerValorCeldaString(fila.GetCell(5)).Trim().ToLower();
-                            string rif = ObtenerValorCeldaString(fila.GetCell(6)).Trim().ToLower();
-                            string numeroCuenta = ObtenerValorCeldaString(fila.GetCell(7)).Trim().ToLower();
+                            string fecha = getValueCellString(fila.GetCell(0));
+                            string fechaValidacion = getValueCellString(fila.GetCell(1)).Trim().ToLower();
+                            string referencia = getValueCellString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
+                            string concepto = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
+                            string saldo = getValueCellString(fila.GetCell(3)).Trim().ToLower();
+                            string monto = getValueCellString(fila.GetCell(4)).Trim().ToLower();
+                            string tipoMov = getValueCellString(fila.GetCell(5)).Trim().ToLower();
+                            string rif = getValueCellString(fila.GetCell(6)).Trim().ToLower();
+                            string numeroCuenta = getValueCellString(fila.GetCell(7)).Trim().ToLower();
 
 
                             // Crear una clave única para la fila
@@ -1549,12 +1550,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     IRow fila = hoja.GetRow(0);
                     if (fila != null)
                     {
-                        string fecha = ObtenerValorCeldaString(fila.GetCell(0)).Trim().ToLower();
-                        string fechaValidacion = ObtenerValorCeldaString(fila.GetCell(1)).Trim().ToLower();
-                        string referencia = ObtenerValorCeldaString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
-                        string descripcion = ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
-                        string monto = ObtenerValorCeldaString(fila.GetCell(3)).Trim().ToLower();
-                        string balance = ObtenerValorCeldaString(fila.GetCell(4)).Trim().ToLower();
+                        string fecha = getValueCellString(fila.GetCell(0)).Trim().ToLower();
+                        string fechaValidacion = getValueCellString(fila.GetCell(1)).Trim().ToLower();
+                        string referencia = getValueCellString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
+                        string descripcion = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
+                        string monto = getValueCellString(fila.GetCell(3)).Trim().ToLower();
+                        string balance = getValueCellString(fila.GetCell(4)).Trim().ToLower();
 
 
                         // Crear una clave única para la fila
@@ -1610,8 +1611,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     if (fila != null)
                     {
 
-                        string validacion = ObtenerValorCeldaString(fila.GetCell(15));    
-                        string descripcion = ObtenerValorCeldaString(fila.GetCell(6)); // Normalizar descripción
+                        string validacion = getValueCellString(fila.GetCell(15));    
+                        string descripcion = getValueCellString(fila.GetCell(6)); // Normalizar descripción
 
 
                         // Crear una clave única para la fila
@@ -1650,60 +1651,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return 0;
 
         }
-
-        private int ExteriorBankValidator(string rutaArchivo)
-        {
-
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-
-                    IRow fila = hoja.GetRow(0);
-                    if (fila != null)
-                    {
-                        string nCuenta = ObtenerValorCeldaString(fila.GetCell(1));
-                        string validacion = ObtenerValorCeldaString(fila.GetCell(15));
-       
-
-
-                        if (validacion.Equals("Archivo modificado, Exterior"))
-                        {
-                            // CASO 2, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, MODIFICADO
-
-                            return 2;
-                        }
-                        else if (nCuenta.Contains("0115"))
-                        {
-                            // CASO 1, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, SIN MODIFICAR
-                            return 1;
-                        }
-                        else
-                        {
-                            // CASO 3, EL DOCUMENTO NO ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO Exterior
-                            return 0;
-                        }
-
-                    }
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show("Error al verificar archivo: " + ex.Message, "ATENCIÓN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;
-            }
-
-            return 0;
-
-        }
-
-
+              
         private void ShowDuplicateRows(List<string> lineas)
         {
 
@@ -2452,7 +2400,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 celda.SetCellValue(0);
                                 celda.CellStyle = estilo;
                             }
-                            else if (ObtenerValorCeldaString(celda).Equals("") || ObtenerValorCeldaComoString(celda) == "" || ObtenerValorCeldaComoString(celda).Equals(""))
+                            else if (getValueCellString(celda).Equals("") || ObtenerValorCeldaComoString(celda) == "" || ObtenerValorCeldaComoString(celda).Equals(""))
                             {
                                 celda.SetCellValue(0);
                                 celda.CellStyle = estilo;

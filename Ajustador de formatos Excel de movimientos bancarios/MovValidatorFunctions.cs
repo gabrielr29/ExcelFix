@@ -61,16 +61,16 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(i);
                         if (fila != null)
                         {
-                            string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            string referencia = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
                             decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
                             decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
                             {
 
-                                string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
-                                string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                                string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                                string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
+                                string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                                string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                                 string fechaValidacionFormateada = "";
                                 ICell fechaValidacionCell = fila.GetCell(1);
@@ -82,7 +82,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                 }
 
                                 if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
@@ -94,7 +94,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                                 else
                                 {
-                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    string fecha = ExcelModifyFunctions.getValueCellString(fila.GetCell(0));
                                     datosFilaEncontrada.Add($"{fecha}");
                                 }
                                                                 
@@ -162,13 +162,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                 }
 
-                                string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim();
-                                string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
-                                string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                                string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                                string referencia = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim();
+                                string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
+                                string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                                string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                                 if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
                                 {
@@ -179,7 +179,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                                 else
                                 {
-                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    string fecha = ExcelModifyFunctions.getValueCellString(fila.GetCell(0));
                                     resultados.Add($"{fecha}");
                                 }
                                                                 
@@ -225,7 +225,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(i);
                         if (fila != null)
                         {
-                            string referencia = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            string referencia = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
                             decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && egresosToCompare == 0)
@@ -233,11 +233,11 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
                                 //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
 
-                                string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                                string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
                                 decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
                                 decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
-                                string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                                string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                                string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                                string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                                 string fechaValidacionFormateada = "";
                                 ICell fechaValidacionCell = fila.GetCell(1);
@@ -249,7 +249,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                 }
 
                                 if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
@@ -261,7 +261,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                                 else
                                 {
-                                    string fecha = functions.ObtenerValorCeldaString(fila.GetCell(0));
+                                    string fecha = ExcelModifyFunctions.getValueCellString(fila.GetCell(0));
                                     resultados.Add($"{fecha}");
                                 }
 
@@ -338,14 +338,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(i);
                         if (fila != null)
                         {
-                            string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            string referenciaCelda = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
                             decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
                             ICell fechaCell = fila.GetCell(0);
                             ICell fechaValidacionCell = fila.GetCell(1);
-                            string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                            string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
                             decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
-                            string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                            string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                            string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                            string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                             bool coincidenciaUltimosDigitos = false;
                             if (referenciaCelda.EndsWith(digitosBusqueda))
@@ -368,7 +368,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                 }
 
                                 string fechaFormateada = "";
@@ -380,7 +380,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                    fechaFormateada = ExcelModifyFunctions.getValueCellString(fechaCell);
                                 }
 
 
@@ -429,14 +429,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         IRow fila = hoja.GetRow(i);
                         if (fila != null)
                         {
-                            string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                            string referenciaCelda = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
                             decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
                             ICell fechaCell = fila.GetCell(0);
                             ICell fechaValidacionCell = fila.GetCell(1);
-                            string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                            string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
                             decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
-                            string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                            string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                            string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                            string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                             bool coincidenciaUltimosDigitos = false;
                             if (referenciaCelda.EndsWith(digitosBusqueda))
@@ -459,7 +459,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                 }
 
                                 string fechaFormateada = "";
@@ -471,7 +471,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
                                 else
                                 {
-                                    fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                    fechaFormateada = ExcelModifyFunctions.getValueCellString(fechaCell);
                                 }
 
 
@@ -557,14 +557,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             IRow fila = hoja.GetRow(i);
                             if (fila != null)
                             {
-                                string referenciaCelda = functions.ObtenerValorCeldaString(fila.GetCell(2)).Trim().ToLower();
+                                string referenciaCelda = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
                                 decimal egresosToCompare = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
                                 ICell fechaCell = fila.GetCell(0);
                                 ICell fechaValidacionCell = fila.GetCell(1);
-                                string descripcion = functions.ObtenerValorCeldaString(fila.GetCell(3)).Trim();
+                                string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
                                 decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
-                                string numeroFactura = functions.ObtenerValorCeldaString(fila.GetCell(7));
-                                string codigoCliente = functions.ObtenerValorCeldaString(fila.GetCell(8));
+                                string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
+                                string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
 
                                 bool coincidenciaUltimosDigitos = false;
                                 if (referenciaCelda.Length >= digitos && referenciaCelda.EndsWith(digitosBusqueda))
@@ -587,7 +587,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                     }
                                     else
                                     {
-                                        fechaValidacionFormateada = functions.ObtenerValorCeldaString(fechaValidacionCell);
+                                        fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
                                     }
                                                                                                             
                                     string fechaFormateada = "";
@@ -599,7 +599,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                     }
                                     else
                                     {
-                                        fechaFormateada = functions.ObtenerValorCeldaString(fechaCell);
+                                        fechaFormateada = ExcelModifyFunctions.getValueCellString(fechaCell);
                                     }
 
 
