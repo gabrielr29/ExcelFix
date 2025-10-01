@@ -8,5 +8,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 {
     internal class BDV
     {
+
+
+
+
+
+
+
     }
 }
