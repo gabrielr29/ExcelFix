@@ -20,10 +20,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
     internal class ExcelModifyFunctions
     {
 
+        FileAccessChecker FileAccessC = new FileAccessChecker();
+
         public void AttachExcelFile(ComboBox BankSelector, TextBox ExcelFilePath)
         {
 
-            if (IsOpen(ExcelFilePath.Text))
+            if (FileAccessC.IsOpen(ExcelFilePath.Text))
             {
 
             }
@@ -46,9 +48,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
 
                         if (BanescoBankValidator(ExcelFilePath.Text) == 1)
-                        {
-
-
+                       {
                             // El archivo no está abierto por otro proceso se procede a la ejecución
 
                             InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5);
@@ -84,9 +84,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
                             ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);
-
-              
+                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);              
 
                             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -498,9 +496,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                 }
 
-
             }
-
         }
 
         public void InsertColumnBetweenTwoCaseBanesco(string rutaArchivo, int indiceColumna)
@@ -552,7 +548,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
 
         }
-
         public void MoveColumnsCaseBVnzlaBExterior(string rutaArchivo, int columnaOrigen, int columnaDestino, int caseControlerNegativesPositivesorAll, int nHoja)
         {
             try
@@ -1113,42 +1108,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine("Error al ajustar ancho de columna: " + ex.Message);
             }
         }
-
-        public bool IsOpen(string path)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
-                {
-                    // El archivo no está abierto por otro proceso
-                    return false;
-                }
-            }
-            catch (IOException ex)
-            {
-                // El archivo está abierto por otro proceso
-                if (IsFileLocked(ex))
-                {
-                    MessageBox.Show("El archivo está abierto. Cierre el archivo para continuar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    // Otro error de E/S
-                    MessageBox.Show("Error al acceder al archivo: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                return true;
-            }
-        }
-
-
-        // Función auxiliar para verificar si la excepción es por archivo bloqueado
-        public virtual bool IsFileLocked(IOException e)
-        {
-            return e.HResult == -2147024864; // Error HRESULT: 0x80070020
-        }
-
-      
-     
+                    
         public void ShowListofText(List<string> lineas)
         {
             try
@@ -1876,71 +1836,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al procesar columnas: {ex.Message}");
             }
         }
-
-        //public void ReverseColumns(string rutaArchivo, int sheetName)
-        //{
-        //    try
-        //    {
-        //        using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-        //        {
-        //            IWorkbook libro = new XSSFWorkbook(archivo);
-
-        //            try
-        //            {
-        //                string nombreHoja = libro.GetSheetAt(sheetName).SheetName;
-        //                ISheet hoja = libro.GetSheet(nombreHoja);
-        //                int ultimaFila = hoja.LastRowNum;
-
-        //                //MessageBox.Show(ultimaFila.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                List<IRow> filas = new List<IRow>();
-
-        //                // Almacenar todas las filas en una lista
-        //                for (int i = 0; i <= ultimaFila; i++)
-        //                {
-        //                    IRow fila = hoja.GetRow(i);
-        //                    if (fila != null)
-        //                    {
-        //                        filas.Add(fila);
-
-        //                    }
-        //                }
-
-        //                MessageBox.Show(filas.Count.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //                // Reinsertar las filas en orden inverso
-        //                int nuevaFilaIndex = 0;
-        //                for (int i = filas.Count - 1; i >= 0; i--)
-        //                {
-        //                    IRow nuevaFila = hoja.CreateRow(nuevaFilaIndex);
-        //                    CopyRow(filas[i], nuevaFila);
-        //                    nuevaFilaIndex++;
-
-        //                    Console.WriteLine($"Fila {i} reinsertada en {nuevaFilaIndex - 1}."); // Depuración
-        //                }
-
-
-        //                // Guardar los cambios
-        //                using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-        //                {
-        //                    libro.Write(archivoSalida);
-        //                }
-        //            }
-        //            catch (ArgumentException ex)
-        //            {
-        //                Console.WriteLine($"Error: No se encontró la hoja en el índice {sheetName}. {ex.Message}");
-        //                return; // Salir de la función si no se encuentra la hoja
-        //            }
-
-
-
-        //        }
-        //        Console.WriteLine($"Orden de filas invertido exitosamente en la hoja.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error al invertir orden de filas: {ex.Message}");
-        //    }
-        //}
-
 
         public void ReverseColumns(string rutaArchivo, int sheetName)
         {
@@ -2699,13 +2594,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
     }
 
 }
-
-
-
-
-
-
-
     
 
 
