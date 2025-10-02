@@ -22,6 +22,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         FileAccessChecker FileAccessC = new FileAccessChecker();
         BankFormatsFixerFunctions.Exterior bancoExterior = new BankFormatsFixerFunctions.Exterior();
+        BankFormatsFixerFunctions.Mercantil bancoMercantil = new BankFormatsFixerFunctions.Mercantil();
+        BankFormatsFixerFunctions.Banesco bancoBanesco = new BankFormatsFixerFunctions .Banesco();
 
         public void AttachExcelFile(ComboBox BankSelector, TextBox ExcelFilePath)
         {
@@ -48,7 +50,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     {
 
 
-                        if (BanescoBankValidator(ExcelFilePath.Text) == 1)
+                        if (bancoBanesco.bankValidator(ExcelFilePath.Text) == 1)
                        {
                             // El archivo no está abierto por otro proceso se procede a la ejecución
 
@@ -91,7 +93,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
 
                         }
-                        else if (BanescoBankValidator(ExcelFilePath.Text) == 2)
+                        else if (bancoBanesco.bankValidator(ExcelFilePath.Text) == 2)
                         {
 
                             MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -190,24 +192,24 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     }
                     else if (BankSelector.Text.Equals("Mercantil (Modificar)"))
                     {
-                        if (MercantilBankValidator(ExcelFilePath.Text) == 1)
+                        if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 1)
                         {
 
                             //Guardando la información para que no se dañe al invertir
 
-                            List<string> columna1Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 0);
-                            List<string> columna2Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 1);
-                            List<string> columna3Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 2);
-                            List<string> columna4Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 3);
-                            List<string> columna5Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 4);
-                            List<string> columna6Hoja1 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 5);
+                            List<string> columna1Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 0);
+                            List<string> columna2Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 1);
+                            List<string> columna3Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 2);
+                            List<string> columna4Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 3);
+                            List<string> columna5Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 4);
+                            List<string> columna6Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 5);
 
-                            List<string> columna1Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 0);
-                            List<string> columna2Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 1);
-                            List<string> columna3Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 2);
-                            List<string> columna4Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 3);
-                            List<string> columna5Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 4);
-                            List<string> columna6Hoja2 = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 1, 5);
+                            List<string> columna1Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 0);
+                            List<string> columna2Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 1);
+                            List<string> columna3Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 2);
+                            List<string> columna4Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 3);
+                            List<string> columna5Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 4);
+                            List<string> columna6Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 5);
 
                             //Insertando la información de fechas
 
@@ -306,7 +308,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                         }
-                        else if (MercantilBankValidator(ExcelFilePath.Text) == 2)
+                        else if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 2)
                         {
                             MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -333,104 +335,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         if (bancoExterior.BankValidator(ExcelFilePath.Text) == 1)
                         {
 
-                   
-                            List<string> listaColumnaFechas = CopiarColumnaFechasComoStrings(ExcelFilePath.Text, 0, 1);                            
-
-
-                            //Borrando las columnas con problemas de formato del banco (no cambian correctamente de General - Número)
-                            //y moviendo los datos
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 7, 4, 0);
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 9, 4, 0);
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 7, 4, 4, 0);
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 9, 6, 4, 0);
-
-
-                            //Limpiando columnas que ya no se utilizarán
-
-                            CleanColumn(ExcelFilePath.Text, 7, 0);
-                            CleanColumn(ExcelFilePath.Text, 9, 0);
-
-                            // Modificando las columnas para separar ingresos y egresos y borrar los símbolos + y - que vienen del banco
-
-                             MoveNumberRelatedtoSimbolCaseBancoExterior(ExcelFilePath.Text, 5, 4);
-
-                            //Ajustar Columnas para mejorar la estética
-                            AdjustColumnWidth(ExcelFilePath.Text, 1, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 2, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 3, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 4, 35, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 5, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 6, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 7, 15, 0);
-
-                            //Moviendo antes de insertar
-                            //Columna total
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 7, 4, 0);
-                            //Columna egresos
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 2, 0);
-                            //Columna ingresos
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 5, 2, 0);
-                            //Columna descripciones
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 3, 4, 5, 0);
-                            //Columna referencias
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 2, 3, 5, 0);
-
-                            //Dándole formato a las columnas numéricas, punto millar, coma decimal
-
-                            FormatNumericColumn(ExcelFilePath.Text, 5, 0);
-                            FormatNumericColumn(ExcelFilePath.Text, 6, 0);
-                            FormatNumericColumn(ExcelFilePath.Text, 7, 0);
-                            FormatNumericColumn(ExcelFilePath.Text, 8, 0);
-
-                            //Insertando columna de fecha de validación
-                            InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2,0);
-
-
-                            //Cambio de columnas fecha y descripción
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 1, 8, 5, 0);
-
-                            //Columna referencia
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 3, 5, 0);
-                            //Columna descripción
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 8, 4, 5, 0);
-                            CleanColumn(ExcelFilePath.Text, 8, 0);
-
-                            //Reparando columna de referencia
-                            ConvertColumnToGeneral(ExcelFilePath.Text, 3, 0);
-
-                            //Trabajando la columna fecha (formato y posición)
-                            //Pegando columna fecha reparada
-                            ChangeCellTextFromListInTheSameOrder(ExcelFilePath.Text, 0, 0, listaColumnaFechas);
-
-
-                            //Ajustando formato de fecha
-                            //ChangeDateFormatCaseExterior(ExcelFilePath.Text, 0, 0, 1);
-                            //ChangeDateFormatCaseMercantil(ExcelFilePath.Text, 1, 0, 0);
-                            ConvertColumnToGeneral(ExcelFilePath.Text, 1, 0);
-                            ChangeDateFormatCaseExteriorPrueba(ExcelFilePath.Text, 1, 0, 0);
-                            
-
-                            //Ajustando etiqueta de fecha de validación
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 1, "Fecha de validación");
-                            AdjustColumnWidth(ExcelFilePath.Text, 2, 20, 0);
-
-                            //Marcando la fecha de modificación para validar que el archivo ya fue manipulado
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 16, "Archivo modificado, Exterior");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
-                                               
-
-
-                            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
-
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);
-
-                            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            bancoExterior.fixFormat(ExcelFilePath);
 
                         }
                         else if (bancoExterior.BankValidator(ExcelFilePath.Text) == 2)
@@ -895,7 +800,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-
+        // POR ELIMINAR -----------------------------------------------------------------------
         public string GetSpecificCellValue(string rutaArchivo, int fila, int columna)
         {
             try
@@ -955,6 +860,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        // ----------------------------------------------------------------------------------------------
 
         public void InsertColumnBetweenTwoVersionC2(string rutaArchivo, int indiceColumna)
         {
@@ -1393,9 +1299,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         
 
-        // Función auxiliar para copiar el contenido y formato de una celd
+        // Función auxiliar para copiar el contenido y formato de una celda
 
-        private ICellStyle CopyCellStyle(ICellStyle estiloOrigen, IWorkbook libro)
+        public ICellStyle CopyCellStyle(ICellStyle estiloOrigen, IWorkbook libro)
         {
 
             ICellStyle estiloDestino = libro.CreateCellStyle();
@@ -1477,180 +1383,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al limpiar columna: {ex.Message}");
             }
         }
-
-        private int VnzlaBankValidator(string rutaArchivo)
-        {
-
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-             
-                        IRow fila = hoja.GetRow(0);
-                        if (fila != null)
-                        {
-                            string fecha = getValueCellString(fila.GetCell(0));
-                            string fechaValidacion = getValueCellString(fila.GetCell(1)).Trim().ToLower();
-                            string referencia = getValueCellString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
-                            string concepto = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
-                            string saldo = getValueCellString(fila.GetCell(3)).Trim().ToLower();
-                            string monto = getValueCellString(fila.GetCell(4)).Trim().ToLower();
-                            string tipoMov = getValueCellString(fila.GetCell(5)).Trim().ToLower();
-                            string rif = getValueCellString(fila.GetCell(6)).Trim().ToLower();
-                            string numeroCuenta = getValueCellString(fila.GetCell(7)).Trim().ToLower();
-
-
-                            // Crear una clave única para la fila
-                            string filaHash = $"{fecha}{referencia}{concepto}{saldo}{monto}{tipoMov}{rif}{numeroCuenta}";
-
-                        if (filaHash.Equals("fechareferenciaconceptosaldomontotipomovimientorifnumerocuenta")){
-                            // CASO 1, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO VNZLA, SIN MODIFICAR
-                            return 1;
-                        }else if (fechaValidacion.Equals("fecha de validación")){
-                            // CASO 2, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO VNZLA, MODIFICADO
-                            
-                            return 2;
-                        }
-                        else
-                        {
-                            // CASO 3, EL DOCUMENTO NO ES UN FORMAATO DE CONSULTA DE MOVIMIENTOS BCO DE VNZLA
-                            return 0;
-                        }
-   
-                        }
         
+    
 
-                }
-            }
-            catch (Exception ex)
-            {
-  
-                MessageBox.Show("Error al verificar archivo: " + ex.Message, "ATENCIÓN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;            
-            }
-
-            return 0;
-
-        }
-
-        private int BanescoBankValidator(string rutaArchivo)
-        {
-
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-                                
-                    IRow fila = hoja.GetRow(0);
-                    if (fila != null)
-                    {
-                        string fecha = getValueCellString(fila.GetCell(0)).Trim().ToLower();
-                        string fechaValidacion = getValueCellString(fila.GetCell(1)).Trim().ToLower();
-                        string referencia = getValueCellString(fila.GetCell(1)).Trim().ToLower(); // Normalizar referencia
-                        string descripcion = getValueCellString(fila.GetCell(2)).Trim().ToLower(); // Normalizar descripción
-                        string monto = getValueCellString(fila.GetCell(3)).Trim().ToLower();
-                        string balance = getValueCellString(fila.GetCell(4)).Trim().ToLower();
-
-
-                        // Crear una clave única para la fila
-                        string filaHash = $"{fecha}{referencia}{descripcion}{monto}{balance}";
-                        
-
-                        if (filaHash.Equals("fechareferenciadescripciónmontobalance"))
-                        {
-                            // CASO 1, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, SIN MODIFICAR
-                            return 1;
-                        }
-                        else if (fechaValidacion.Equals("fecha de validación"))
-                        {
-                            // CASO 2, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, MODIFICADO
-
-                            return 2;
-                        }
-                        else
-                        {
-                            // CASO 3, EL DOCUMENTO NO ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO BANESCO
-                            return 0;
-                        }
-
-                    }
-
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show("Error al verificar archivo: " + ex.Message, "ATENCIÓN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;
-            }
-
-            return 0;
-
-        }
-
-        private int MercantilBankValidator(string rutaArchivo)
-        {
-
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-
-                    IRow fila = hoja.GetRow(0);
-                    if (fila != null)
-                    {
-
-                        string validacion = getValueCellString(fila.GetCell(15));    
-                        string descripcion = getValueCellString(fila.GetCell(6)); // Normalizar descripción
-
-
-                        // Crear una clave única para la fila
-             
-
-                        if (descripcion.Equals("NC") || descripcion.Equals("ND") || descripcion.Equals("DP") || descripcion.Equals("SF"))
-                        {
-                            // CASO 1, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, SIN MODIFICAR
-                            return 1;
-                        }
-                        else if (validacion.Equals("Archivo modificado, Mercantil"))
-                        {
-                            // CASO 2, EL DOCUMENTO SI ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO, MODIFICADO
-
-                            return 2;
-                        }
-                        else
-                        {
-                            // CASO 3, EL DOCUMENTO NO ES UN FORMATO DE CONSULTA DE MOVIMIENTOS BCO Mercantil
-                            return 0;
-                        }
-
-                    }
-
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-
-                MessageBox.Show("Error al verificar archivo: " + ex.Message, "ATENCIÓN", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return 0;
-            }
-
-            return 0;
-
-        }
               
         private void ShowDuplicateRows(List<string> lineas)
         {
@@ -1706,85 +1441,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
          * 
          * 
          * */
-        public void MoveNumberRelatedtoSimbolCaseBancoExterior(string rutaArchivo,  int columnaSimbolos, int columnaNumeros)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
+     
 
-                    // Obtener el estilo de la celda origen (solo una vez)
-                    ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(1); // Celda de ejemplo para obtener el estilo
-                    ICellStyle? estiloOrigen = null;
-
-                    if (celdaOrigenEjemplo != null)
-                    {
-                        estiloOrigen = celdaOrigenEjemplo.CellStyle;
-                        CopyCellStyle(celdaOrigenEjemplo.CellStyle, libro);
-                    }
-
-                    ICellStyle estiloCero = libro.CreateCellStyle();
-                    estiloCero = estiloOrigen;
-
-                    estiloCero.DataFormat = libro.CreateDataFormat().GetFormat("0;-0;;@");
-
-
-
-                    for (int filaIndex = 0; filaIndex <= hoja.LastRowNum; filaIndex++)
-                    {
-                        IRow fila = hoja.GetRow(filaIndex);
-                        if (fila != null)
-                        {
-                            ICell celdaSimbolo = fila.GetCell(columnaSimbolos - 1);
-                            ICell celdaNumero = fila.GetCell(columnaNumeros - 1);
-
-                            if (celdaSimbolo != null && celdaNumero != null)
-                            {
-                                string simbolo = celdaSimbolo.StringCellValue?.Trim();
-
-                                if (simbolo == "+")
-                                {
-                                    // Dejar la celda en blanco
-                                    celdaSimbolo.SetCellValue(0);
-                                    celdaSimbolo.CellStyle = estiloCero;
-                                }
-                                else if (simbolo == "-")
-                                {
-                                    // Mover el número a la columna de símbolos
-                                    if (celdaNumero.CellType == CellType.Numeric)
-                                    {
-                                        celdaSimbolo.SetCellValue(celdaNumero.NumericCellValue);
-                                    }
-                                    else if (celdaNumero.CellType == CellType.String && double.TryParse(celdaNumero.StringCellValue, out double valorNumerico))
-                                    {
-                                        celdaSimbolo.SetCellValue(valorNumerico);
-                                    }
-
-                                    // Limpiar la celda numérica
-                                    celdaNumero.SetCellValue(0);
-                                    celdaNumero.CellStyle = estiloCero;
-                                }
-                            }
-                        }
-                    }
-
-                    // Guardar los cambios
-                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                    {
-                        libro.Write(archivoSalida);
-                    }
-                }
-                Console.WriteLine($"Columnas procesadas exitosamente.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al procesar columnas: {ex.Message}");
-            }
-        }
-
+        // POR ELIMINAR --------------------------------------------------------------
         public void ReverseColumns(string rutaArchivo, int sheetName)
         {
             try
@@ -1840,6 +1499,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al invertir orden de filas: {ex.Message}");
             }
         }
+
+        // ----------------------------------------------------------------------------------------
 
         private void CopyRow(IRow filaOriginal, IRow filaNueva)
         {
@@ -1944,75 +1605,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+       
 
-        public void ChangeDateFormatCaseMercantil(string rutaArchivo, int columnaFecha, int nHoja, int filaIndexStart)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(nHoja).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-
-                    for (int filaIndex = filaIndexStart; filaIndex <= hoja.LastRowNum; filaIndex++)
-                    {
-                        IRow fila = hoja.GetRow(filaIndex);
-                        if (fila != null)
-                        {
-                            ICell celdaFecha = fila.GetCell(columnaFecha - 1);
-                            if (celdaFecha != null)
-                            {
-                                // Forzar la lectura de la celda como cadena
-                                celdaFecha.SetCellType(CellType.String);
-
-                                string valorFecha = celdaFecha.StringCellValue;
-                                if (!string.IsNullOrEmpty(valorFecha) && (valorFecha.Length == 7 || valorFecha.Length == 8))
-                                {
-                                    try
-                                    {
-                                        DateTime fecha;
-                                        if (valorFecha.Length == 7)
-                                        {
-                                            fecha = DateTime.ParseExact("0" + valorFecha, "ddMMyyyy", CultureInfo.InvariantCulture);
-                                        }
-                                        else
-                                        {
-                                            fecha = DateTime.ParseExact(valorFecha, "ddMMyyyy", CultureInfo.InvariantCulture);
-                                        }
-
-                                        celdaFecha.SetCellValue(fecha);
-                                        ICellStyle estiloFecha = libro.CreateCellStyle();
-                                        IDataFormat formatoFecha = libro.CreateDataFormat();
-                                        estiloFecha.DataFormat = formatoFecha.GetFormat("dd/MM/yyyy");
-                                        celdaFecha.CellStyle = estiloFecha;
-                                        celdaFecha.SetCellType(CellType.Numeric);
-                                    }
-                                    catch (FormatException ex)
-                                    {
-                                        Console.WriteLine($"Formato de fecha inválido en la fila {filaIndex + 1}: {ex.Message}");
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                    {
-                        libro.Write(archivoSalida);
-                    }
-
-                    Console.WriteLine("Formato de fecha cambiado exitosamente.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al cambiar formato de fecha: {ex.Message}");
-            }
-        }
-
-   
-
+        // POR ELIMINAR ----------------------------------------------------------------
         public void ChangeDateFormatCaseExterior(string rutaArchivo, int columna, int nHoja, int filaIndexStart)
         {
             try
@@ -2078,6 +1673,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al formatear columna: {ex.Message}");
             }
         }
+
+
+        // ----------------------------------------------------------------------------------------------
         public void ConvertColumnToGeneral(string rutaArchivo, int columnaReferencia, int nHoja)
         {
             try
@@ -2186,7 +1784,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public List<string> CopiarColumnaFechasComoStrings(string rutaArchivo, int sheetName, int columna)
+        public List<string> CopyDateColumnsAsStrings(string rutaArchivo, int sheetName, int columna)
         {
             List<string> listaStrings = new List<string>();
 
@@ -2233,15 +1831,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        private string ObtenerValorCeldaComoString(ICell celda)
+        public string ObtenerValorCeldaComoString(ICell celda)
         {
             switch (celda.CellType)
             {
                 case CellType.Boolean:
                     return celda.BooleanCellValue.ToString();
                 case CellType.Numeric:
-                 
-                        return celda.NumericCellValue.ToString();
+                    return celda.NumericCellValue.ToString();
                 case CellType.String:
                     return celda.StringCellValue;
                 case CellType.Formula:
@@ -2336,9 +1933,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                     }
 
-
-
-
                     using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
                     {
                         libro.Write(archivoSalida);
@@ -2423,120 +2017,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }
-
-        public void ConvertirColumnaAString(string rutaArchivo, int sheetName, int columnaIndex)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(sheetName);
-                    int ultimaFila = hoja.LastRowNum;
-
-                    for (int rowIndex = 0; rowIndex <= ultimaFila; rowIndex++)
-                    {
-                        IRow fila = hoja.GetRow(rowIndex);
-                        if (fila != null)
-                        {
-                            ICell celda = fila.GetCell(columnaIndex);
-                            if (celda != null)
-                            {
-                                string valorString = ObtenerValorCeldaComoString(celda);
-                                celda.SetCellValue(valorString);
-                            }
-                        }
-                    }
-
-                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                    {
-                        libro.Write(archivoSalida);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-        }
-
-        public void ChangeDateFormatCaseExteriorPrueba(string rutaArchivo, int columnaFecha, int nHoja, int filaIndexStart)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(nHoja).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-
-                    for (int filaIndex = filaIndexStart; filaIndex <= hoja.LastRowNum; filaIndex++)
-                    {
-                        IRow fila = hoja.GetRow(filaIndex);
-                        if (fila != null)
-                        {
-                            ICell celdaFecha = fila.GetCell(columnaFecha - 1);
-                            if (celdaFecha != null)
-                            {
-                                if (celdaFecha.CellType == CellType.Numeric && DateUtil.IsCellDateFormatted(celdaFecha))
-                                {
-                                    // Manejar celdas numéricas (fechas de Excel)
-                                    double valorNumerico = celdaFecha.NumericCellValue;
-                                    if (DateUtil.IsValidExcelDate(valorNumerico))
-                                    {
-                                        DateTime fechaBase = new DateTime(1899, 12, 30);
-                                        DateTime fecha = fechaBase.AddDays(valorNumerico);
-                                        string fechaString = fecha.ToString("dd/MM/yyyy");
-                                        celdaFecha.SetCellValue(fechaString);
-                                        celdaFecha.SetCellType(CellType.String); // Cambiar a tipo String
-                                    }
-                                }
-                                else
-                                {
-                                    // Manejar celdas de cadena (dd/M/yyyy)
-                                    celdaFecha.SetCellType(CellType.String);
-                                    string valorFecha = ObtenerValorCeldaComoString(celdaFecha);
-                                    if (!string.IsNullOrEmpty(valorFecha) && (valorFecha.Length == 8 || valorFecha.Length == 9 || valorFecha.Length == 10)) // Ajuste para manejar diferentes longitudes
-                                    {
-                                        try
-                                        {
-                                            DateTime fecha;
-                                            if (DateTime.TryParseExact(valorFecha, "dd/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha) ||
-                                                DateTime.TryParseExact(valorFecha, "d/M/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha) ||
-                                                DateTime.TryParseExact(valorFecha, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out fecha)) // intento con el formato de salida
-                                            {
-                                                string fechaString = fecha.ToString("dd/MM/yyyy");
-                                                celdaFecha.SetCellValue(fechaString);
-                                            }
-                                            else
-                                            {
-                                                Console.WriteLine($"Formato de fecha inválido en la fila {filaIndex + 1}: {valorFecha}");
-                                            }
-                                        }
-                                        catch (FormatException ex)
-                                        {
-                                            Console.WriteLine($"Formato de fecha inválido en la fila {filaIndex + 1}: {ex.Message}");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                    {
-                        libro.Write(archivoSalida);
-                    }
-
-                    Console.WriteLine("Formato de fecha cambiado exitosamente.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al cambiar formato de fecha: {ex.Message}");
-            }
-        }
-
 
 
     }
