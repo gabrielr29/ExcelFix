@@ -139,7 +139,124 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
 
 
+        public void fixFormat(TextBox ExcelFilePath)
+        {
 
+            //Guardando la información para que no se dañe al invertir
+
+            List<string> columna1Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 0);
+            List<string> columna2Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 1);
+            List<string> columna3Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 2);
+            List<string> columna4Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 3);
+            List<string> columna5Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 4);
+            List<string> columna6Hoja1 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 5);
+
+            List<string> columna1Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 0);
+            List<string> columna2Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 1);
+            List<string> columna3Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 2);
+            List<string> columna4Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 3);
+            List<string> columna5Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 4);
+            List<string> columna6Hoja2 = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 5);
+
+            //Insertando la información de fechas
+
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 0, 0, columna1Hoja1);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 1, 0, columna2Hoja1);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 2, 0, columna3Hoja1);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 3, 0, columna4Hoja1);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 4, 0, columna5Hoja1);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 5, 0, columna6Hoja1);
+
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 0, 1, columna1Hoja2);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 1, 1, columna2Hoja2);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 2, 1, columna3Hoja2);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 3, 1, columna4Hoja2);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 4, 1, columna5Hoja2);
+            modifyFunctions.changeCellTextFromListInReverseOrder(ExcelFilePath.Text, 5, 1, columna6Hoja2);
+
+            //Cambiando el orden de los movimientos (HOJA 1 Y 2)
+
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 7, 0);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 7, 1);
+            modifyFunctions.InsertRowOnTop(ExcelFilePath.Text, 0);
+            modifyFunctions.InsertRowOnTop(ExcelFilePath.Text, 1);
+
+            //Moviendo columnas para que la función insertar no rompa el orden HOJA 1
+
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 7, 3, 0);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 6, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 6, 0);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 5, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 5, 6, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 3, 4, 5, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 2, 3, 5, 0);
+
+            //Moviendo columnas para que la función insertar no rompa el orden HOJA 2
+
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 7, 3, 1);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 6, 1);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 6, 1);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 5, 1);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 5, 6, 1);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 3, 4, 5, 1);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 2, 3, 5, 1);
+
+            //Insertando columna de Fecha de validación (HOJA 1 Y 2)
+
+            modifyFunctions.InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 0);
+            modifyFunctions.InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 1);
+
+            //Dando formato a las columnas HOJA 1
+
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 0);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 0);
+
+            //Dando formato a las columnas HOJA 2
+
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
+
+            //Ajustando tamaño de las columnas HOJA 1
+
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 3, 15, 0);
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 4, 45, 0);
+
+            //Ajustando tamaño de las columnas HOJA 2
+
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 3, 15, 1);
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 4, 45, 1);
+
+            //Corrigiendo formato de fecha HOJA 1 Y 2
+
+            ChangeDateFormatCaseMercantil(ExcelFilePath.Text, 1, 0, 0);
+            ChangeDateFormatCaseMercantil(ExcelFilePath.Text, 1, 1, 0);
+
+            //Cambiando formato de referencias
+
+            modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 0);
+            modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 1);
+
+            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
+
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 4);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 5);
+
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 1, 4);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 1, 5);
+
+            //Añadiendo identificadores
+
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 16, "Archivo modificado, Mercantil");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
+            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+
+
+
+        }
 
 
 

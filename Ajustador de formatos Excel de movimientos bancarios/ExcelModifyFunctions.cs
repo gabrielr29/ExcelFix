@@ -1,4 +1,10 @@
-﻿using System;
+﻿using NPOI.HSSF.UserModel;
+using NPOI.OpenXmlFormats;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
+using NPOI.XSSF.UserModel;
+using SixLabors.ImageSharp.Formats.Gif;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Globalization;
@@ -7,11 +13,6 @@ using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using NPOI.HSSF.UserModel;
-using NPOI.OpenXmlFormats;
-using NPOI.SS.Formula.Functions;
-using NPOI.SS.UserModel;
-using NPOI.XSSF.UserModel;
 
 
 
@@ -24,6 +25,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         BankFormatsFixerFunctions.Exterior bancoExterior = new BankFormatsFixerFunctions.Exterior();
         BankFormatsFixerFunctions.Mercantil bancoMercantil = new BankFormatsFixerFunctions.Mercantil();
         BankFormatsFixerFunctions.Banesco bancoBanesco = new BankFormatsFixerFunctions .Banesco();
+        BankFormatsFixerFunctions.BDV bancoVenezuela = new BankFormatsFixerFunctions.BDV ();
 
         public void AttachExcelFile(ComboBox BankSelector, TextBox ExcelFilePath)
         {
@@ -51,46 +53,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
 
                         if (bancoBanesco.bankValidator(ExcelFilePath.Text) == 1)
-                       {
-                            // El archivo no está abierto por otro proceso se procede a la ejecución
+                        {
 
-                            InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5);
-                            InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 2);
-
-                            //Ajustando columna "Fecha de validación"
-                            AdjustColumnWidth(ExcelFilePath.Text, 2, 20, 0);
-                            //Ajustando columna "Descripción"
-                            AdjustColumnWidth(ExcelFilePath.Text, 4, 50, 0);
-                            //Ajustando columna "Referencia"
-                            AdjustColumnWidth(ExcelFilePath.Text, 3, 14, 0);
-
-
-                            MoveNegativesNumbersCaseBanesco(ExcelFilePath.Text, 5, 6);
-
-                            //Modificación personal para facilitar la ubicación:
-                            /* 
-                              * Las columnas se cuentan desde 0, las filas no.
-                              * No modifiqué el conteo en las columnas, porque la mayor parte
-                              * de las modificaciones a realizar no involucran un conteo demasiado
-                              * variado, en el caso de las filas me estaba complicando en las comparaciones.
-                              * 
-                              * */
-
-
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 1, "Fecha de validación");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 4, "Ingresos");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 5, "Egresos");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 16, "Archivo modificado");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
-
-                            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
-
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);              
-
-                            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                            bancoBanesco.fixFormat(ExcelFilePath);
 
                         }
                         else if (bancoBanesco.bankValidator(ExcelFilePath.Text) == 2)
@@ -109,80 +74,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                     else if (BankSelector.Text.Equals("Banco de Venezuela (Modificar)"))
                     {
-                        if (VnzlaBankValidator(ExcelFilePath.Text) == 1)
+                        if (bancoVenezuela.bankValidator(ExcelFilePath.Text) == 1)
                         {
-                            InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 5, 3, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 6, 3, 0);
-                            DeleteColumnAndMove(ExcelFilePath.Text, 4);
-                            DeleteColumnAndMove(ExcelFilePath.Text, 6);
-
-                            InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 2);
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 1, "Fecha de validación");
-                            InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 6);
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 1, 0);
-
-                            //Ajustando columna "Fecha de validación"
-                            AdjustColumnWidth(ExcelFilePath.Text, 2, 20, 0);
-                            //Ajustando columna "Referencias"
-                            AdjustColumnWidth(ExcelFilePath.Text, 3, 20, 0);
-                            //Ajustando columna "Concepto"
-                            AdjustColumnWidth(ExcelFilePath.Text, 4, 50, 0);
-
-                            //Reajustando fuente restantes para mejorar la estética
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 0, "Fecha");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 2, "Referencia");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 3, "Concepto");
-
-
-                            //Borrando las columnas con problemas de formato del banco (no cambian correctamente de General - Número)
-                            //y moviendo los datos
-
-                            InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 7);
-                            InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 6);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 2, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 9, 8, 3, 0);
-
-
-                            //Ajustando columna "Saldo"
-                            AdjustColumnWidth(ExcelFilePath.Text, 7, 15, 0);
-
-                            //Eliminando columnas problemáticas
-                            DeleteColumnAndMove(ExcelFilePath.Text, 5);
-                            CleanColumn(ExcelFilePath.Text, 8, 0);
-                            CleanColumn(ExcelFilePath.Text, 9, 0);
-                            CleanColumn(ExcelFilePath.Text, 10, 0);
-
-                            //Ajustando las fuentes y mejorando la estética
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 4, "Ingresos");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 5, "Egresos");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 6, "Saldo");
-
-
-                            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
-
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);
-
-                            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-
-                            /*                          
-                             * La diferencia entre InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5); y 
-                             * InsertColumnBetweenTwoCaseBanescoC2(ExcelFilePath.Text, 2); es que la primera inserta
-                             * copiando todos los datos de la columna a la izquierda, facilitando el traslado de los datos
-                             * mientras que la segunda simplemente inserta una columna en blanco.   
-                             *                               
-                             * */
-
+                            bancoVenezuela.fixFormat(ExcelFilePath);
                         }
-                        else if (VnzlaBankValidator(ExcelFilePath.Text) == 2)
+                        else if (bancoVenezuela.bankValidator(ExcelFilePath.Text) == 2)
                         {
-
                             MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                         }
                         else
                         {
@@ -195,117 +93,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 1)
                         {
 
-                            //Guardando la información para que no se dañe al invertir
-
-                            List<string> columna1Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 0);
-                            List<string> columna2Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 1);
-                            List<string> columna3Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 2);
-                            List<string> columna4Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 3);
-                            List<string> columna5Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 4);
-                            List<string> columna6Hoja1 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 5);
-
-                            List<string> columna1Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 0);
-                            List<string> columna2Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 1);
-                            List<string> columna3Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 2);
-                            List<string> columna4Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 3);
-                            List<string> columna5Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 4);
-                            List<string> columna6Hoja2 = CopyDateColumnsAsStrings(ExcelFilePath.Text, 1, 5);
-
-                            //Insertando la información de fechas
-
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 0, 0, columna1Hoja1);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 1, 0, columna2Hoja1);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 2, 0, columna3Hoja1);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 3, 0, columna4Hoja1);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 4, 0, columna5Hoja1);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 5, 0, columna6Hoja1);
-
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 0, 1, columna1Hoja2);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 1, 1, columna2Hoja2);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 2, 1, columna3Hoja2);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 3, 1, columna4Hoja2);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 4, 1, columna5Hoja2);
-                            ChangeCellTextFromListInReverseOrder(ExcelFilePath.Text, 5, 1, columna6Hoja2);
-
-                            //Cambiando el orden de los movimientos (HOJA 1 Y 2)
-
-                            CleanColumn(ExcelFilePath.Text, 7, 0);
-                            CleanColumn(ExcelFilePath.Text, 7, 1);
-                            InsertRowOnTop(ExcelFilePath.Text, 0);
-                            InsertRowOnTop(ExcelFilePath.Text, 1);
-
-                            //Moviendo columnas para que la función insertar no rompa el orden HOJA 1
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 7, 3, 0);
-                            CleanColumn(ExcelFilePath.Text, 6, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 6, 0);
-                            CleanColumn(ExcelFilePath.Text, 5, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 5, 6, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 3, 4, 5, 0);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 2, 3, 5, 0);
-
-                            //Moviendo columnas para que la función insertar no rompa el orden HOJA 2
-
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 7, 3, 1);
-                            CleanColumn(ExcelFilePath.Text, 6, 1);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 6, 1);
-                            CleanColumn(ExcelFilePath.Text, 5, 1);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 5, 6, 1);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 3, 4, 5, 1);
-                            MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 2, 3, 5, 1);
-
-                            //Insertando columna de Fecha de validación (HOJA 1 Y 2)
-
-                            InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 0);
-                            InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 1);
-
-
-                            //Dando formato a las columnas HOJA 1
-
-                            FormatNumericColumn(ExcelFilePath.Text, 7, 0);
-                            FormatNumericColumn(ExcelFilePath.Text, 6, 0);
-                            FormatNumericColumn(ExcelFilePath.Text, 5, 0);
-
-                            //Dando formato a las columnas HOJA 2
-
-                            FormatNumericColumn(ExcelFilePath.Text, 7, 1);
-                            FormatNumericColumn(ExcelFilePath.Text, 6, 1);
-                            FormatNumericColumn(ExcelFilePath.Text, 5, 1);
-
-                            //Ajustando tamaño de las columnas HOJA 1
-
-                            AdjustColumnWidth(ExcelFilePath.Text, 3, 15, 0);
-                            AdjustColumnWidth(ExcelFilePath.Text, 4, 45, 0);
-
-                            //Ajustando tamaño de las columnas HOJA 2
-
-                            AdjustColumnWidth(ExcelFilePath.Text, 3, 15, 1);
-                            AdjustColumnWidth(ExcelFilePath.Text, 4, 45, 1);
-
-                            //Corrigiendo formato de fecha HOJA 1 Y 2
-
-                            ChangeDateFormatCaseMercantil(ExcelFilePath.Text, 1, 0, 0);
-                            ChangeDateFormatCaseMercantil(ExcelFilePath.Text, 1, 1, 0);
-
-                            //Cambiando formato de referencias
-
-                            ConvertColumnToGeneral(ExcelFilePath.Text, 3, 0);
-                            ConvertColumnToGeneral(ExcelFilePath.Text, 3, 1);
-
-                            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
-
-
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 1, 4);
-                            ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 1, 5);
-
-                            //Añadiendo identificadores
-
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 16, "Archivo modificado, Mercantil");
-                            ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
-                            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            bancoMercantil.fixFormat(ExcelFilePath);
 
                         }
                         else if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 2)
@@ -486,9 +274,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (celdaOrigen != null && fila.RowNum != 0)
                             {
-
-
-
                                 double valor = (double)ObtenerValorCeldaDecimal(celdaOrigen);
                                 ICell celdaDestino = fila.CreateCell(columnaDestino - 1);
                                 // Crear un nuevo estilo para la celda destino
@@ -645,7 +430,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine("Error al mover cantidades negativas: " + ex.Message);
             }
         }
-
 
         public void MoveNegativesNumbersCaseBanesco(string rutaArchivo, int columnaOrigen, int columnaDestino)
         {
@@ -1295,10 +1079,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     break;
             }
         }
-
-
         
-
         // Función auxiliar para copiar el contenido y formato de una celda
 
         public ICellStyle CopyCellStyle(ICellStyle estiloOrigen, IWorkbook libro)
@@ -1383,10 +1164,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al limpiar columna: {ex.Message}");
             }
         }
-        
-    
-
-              
+                      
         private void ShowDuplicateRows(List<string> lineas)
         {
 
@@ -1431,17 +1209,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
    
         }
-
-        /*
-         * 
-         * Esta función permite mover los números negativos de una columna, en función del signo contenido en su
-         * correlativo en la columna justo a su derecha. Fue usada para ajustar el formato de banco exterior, y que 
-         * las cantidades positivas y negativas no estén juntas en una columnas, siendo diferenciadas solo por esos
-         * símbolos positivos y negativos en la columna a la derecha. 
-         * 
-         * 
-         * */
-     
 
         // POR ELIMINAR --------------------------------------------------------------
         public void ReverseColumns(string rutaArchivo, int sheetName)
@@ -1810,7 +1577,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             if (celda != null && !celda.Equals(""))
                             {
                                 // Convertir el valor de la celda a string
-                                string valorCelda = ObtenerValorCeldaComoString(celda);
+                                string valorCelda = getCellValueAsStringII(celda);
                                 listaStrings.Add(valorCelda);
                             }
   
@@ -1831,7 +1598,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public string ObtenerValorCeldaComoString(ICell celda)
+        public string getCellValueAsStringII(ICell celda)
         {
             switch (celda.CellType)
             {
@@ -1859,7 +1626,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public void ChangeCellTextFromListInReverseOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
+        public void changeCellTextFromListInReverseOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
         {
             try
             {
@@ -1906,7 +1673,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public void ChangeCellTextFromListInTheSameOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
+        public void changeCellTextFromListInTheSameOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
         {
             try
             {
@@ -1947,7 +1714,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public void ReemplazarCeldasEnBlancoConCero(string rutaArchivo, int sheetName, int columnaIndex)
+        public void replaceEmptyCellsWithZero(string rutaArchivo, int sheetName, int columnaIndex)
         {
             try
             {
@@ -1994,7 +1761,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 celda.SetCellValue(0);
                                 celda.CellStyle = estilo;
                             }
-                            else if (getValueCellString(celda).Equals("") || ObtenerValorCeldaComoString(celda) == "" || ObtenerValorCeldaComoString(celda).Equals(""))
+                            else if (getValueCellString(celda).Equals("") || getCellValueAsStringII(celda) == "" || getCellValueAsStringII(celda).Equals(""))
                             {
                                 celda.SetCellValue(0);
                                 celda.CellStyle = estilo;

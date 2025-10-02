@@ -133,7 +133,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Trabajando la columna fecha (formato y posición)
             //Pegando columna fecha reparada
-            modifyFunctions.ChangeCellTextFromListInTheSameOrder(ExcelFilePath.Text, 0, 0, listaColumnaFechas);
+            modifyFunctions.changeCellTextFromListInTheSameOrder(ExcelFilePath.Text, 0, 0, listaColumnaFechas);
 
 
             //Ajustando formato de fecha
@@ -150,9 +150,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
 
             //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
-            modifyFunctions.ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 4);
-            modifyFunctions.ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 5);
-            modifyFunctions.ReemplazarCeldasEnBlancoConCero(ExcelFilePath.Text, 0, 6);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 4);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 5);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 6);
 
             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -195,7 +195,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                                 {
                                     // Manejar celdas de cadena (dd/M/yyyy)
                                     celdaFecha.SetCellType(CellType.String);
-                                    string valorFecha = modifyFunctions.ObtenerValorCeldaComoString(celdaFecha);
+                                    string valorFecha = modifyFunctions.getCellValueAsStringII(celdaFecha);
                                     if (!string.IsNullOrEmpty(valorFecha) && (valorFecha.Length == 8 || valorFecha.Length == 9 || valorFecha.Length == 10)) // Ajuste para manejar diferentes longitudes
                                     {
                                         try
@@ -236,6 +236,15 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                 Console.WriteLine($"Error al cambiar formato de fecha: {ex.Message}");
             }
         }
+
+    /*
+    * 
+    * Esta función permite mover los números negativos de una columna, en función del signo contenido en su
+    * correlativo en la columna justo a su derecha. Fue usada para ajustar el formato de banco exterior, y que 
+    * las cantidades positivas y negativas no estén juntas en una columnas, siendo diferenciadas solo por esos
+    * símbolos positivos y negativos en la columna a la derecha. 
+    * 
+    * */
 
         public void MoveNumberRelatedtoSimbolCaseBancoExterior(string rutaArchivo, int columnaSimbolos, int columnaNumeros)
         {

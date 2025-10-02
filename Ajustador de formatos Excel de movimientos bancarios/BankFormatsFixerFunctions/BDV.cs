@@ -10,9 +10,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 {
     internal class BDV
     {
+        ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
-
-        private int VnzlaBankValidator(string rutaArchivo)
+        public int bankValidator(string rutaArchivo)
         {
 
             try
@@ -70,6 +70,78 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             }
 
             return 0;
+
+        }
+
+        public void fixFormat(TextBox ExcelFilePath)
+        {
+
+            modifyFunctions.InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 5, 3, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 4, 6, 3, 0);
+            modifyFunctions.DeleteColumnAndMove(ExcelFilePath.Text, 4);
+            modifyFunctions.DeleteColumnAndMove(ExcelFilePath.Text, 6);
+
+            modifyFunctions.InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 2);
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 1, "Fecha de validación");
+            modifyFunctions.InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 6);
+
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 1, 0);
+
+            //Ajustando columna "Fecha de validación"
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 2, 20, 0);
+            //Ajustando columna "Referencias"
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 3, 20, 0);
+            //Ajustando columna "Concepto"
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 4, 50, 0);
+
+            //Reajustando fuente restantes para mejorar la estética
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 0, "Fecha");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 2, "Referencia");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 3, "Concepto");
+
+
+            //Borrando las columnas con problemas de formato del banco (no cambian correctamente de General - Número)
+            //y moviendo los datos
+
+            modifyFunctions.InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 7);
+            modifyFunctions.InsertColumnBetweenTwoVersionC2(ExcelFilePath.Text, 6);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 5, 6, 2, 0);
+            modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 9, 8, 3, 0);
+
+
+            //Ajustando columna "Saldo"
+            modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 7, 15, 0);
+
+            //Eliminando columnas problemáticas
+            modifyFunctions.DeleteColumnAndMove(ExcelFilePath.Text, 5);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 8, 0);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 9, 0);
+            modifyFunctions.CleanColumn(ExcelFilePath.Text, 10, 0);
+
+            //Ajustando las fuentes y mejorando la estética
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 4, "Ingresos");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 5, "Egresos");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 6, "Saldo");
+
+            //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
+
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 4);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 5);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 6);
+
+            MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+            /*                          
+             * La diferencia entre InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5); y 
+             * InsertColumnBetweenTwoCaseBanescoC2(ExcelFilePath.Text, 2); es que la primera inserta
+             * copiando todos los datos de la columna a la izquierda, facilitando el traslado de los datos
+             * mientras que la segunda simplemente inserta una columna en blanco.   
+             *                               
+             * */
+
+
 
         }
 
