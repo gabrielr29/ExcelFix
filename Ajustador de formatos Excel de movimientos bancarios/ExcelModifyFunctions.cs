@@ -114,7 +114,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     {
 
 
-                        ShowDuplicateRows(RevisarFilasRepetidas(ExcelFilePath.Text, 4));
+                        ShowDuplicateRows(checkRepetedRows(ExcelFilePath.Text, 4));
 
 
                     }
@@ -143,7 +143,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     else if (BankSelector.Text.Equals("Banco de Vnzla/Exterior (Ubicar duplicados)"))
                     {
 
-                        ShowDuplicateRows(RevisarFilasRepetidas(ExcelFilePath.Text, 3));
+                        ShowDuplicateRows(checkRepetedRows(ExcelFilePath.Text, 3));
 
 
                     }
@@ -799,6 +799,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine("Error al ajustar ancho de columna: " + ex.Message);
             }
         }
+
+        // Para debuggear ====================================================================
                     
         public void ShowListofText(List<string> lineas)
         {
@@ -823,8 +825,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        // ===========================================================================================
 
-        public List<string> RevisarFilasRepetidas(string rutaArchivo, int startedRowToRevision)
+        public List<string> checkRepetedRows(string rutaArchivo, int startedRowToRevision)
         {
             List<string> lineas = new List<string>();
             List<string> lineasToHL = new List<string>();
@@ -1342,7 +1345,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-          public void InsertRowOnTop(string rutaArchivo, int nHoja)
+        public void InsertRowOnTop(string rutaArchivo, int nHoja)
         {
             try
             {
