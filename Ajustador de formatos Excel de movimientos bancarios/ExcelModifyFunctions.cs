@@ -1613,6 +1613,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     string nombreHoja = libro.GetSheetAt(sheetName).SheetName;
                     ISheet hoja = libro.GetSheet(nombreHoja);
                     int ultimaFila = hoja.LastRowNum;
+                    MessageBox.Show(ultimaFila.ToString(), "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
 
                     for (int i = startingRow; i <= ultimaFila; i++)
                     {
@@ -1735,7 +1737,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                     int inverseIndex = listaColumna1.Count();
 
-                    for (int i = startingRow; i < listaColumna1.Count; i++)
+                    for (int i = startingRow; i <= listaColumna1.Count; i++)
                     {
                         IRow filaObj = hoja.GetRow(i);
                         ICell celda = filaObj.GetCell(columna);
@@ -1745,10 +1747,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             celda = filaObj.CreateCell(columna);
                         }
 
+
                         inverseIndex = inverseIndex - 1;
 
                         // 6. Cambiar el texto de la celda
                         celda.SetCellValue(listaColumna1[inverseIndex]);
+
+
 
 
                     }

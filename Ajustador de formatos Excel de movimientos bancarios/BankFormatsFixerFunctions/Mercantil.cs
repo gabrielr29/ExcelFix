@@ -321,35 +321,35 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Guardando la información para que no se dañe al invertir
 
-            List<string> columna1Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 0, 6);
-            List<string> columna2Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 1, 6);
-            List<string> columna3Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 2, 6);
-            List<string> columna4Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 3, 6);
-            List<string> columna5Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 4, 6);
-            List<string> columna6Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 5, 6);
+            List<string> columna1Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 0, 1);
+            List<string> columna2Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 1, 1);
+            List<string> columna3Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 2, 1);
+            List<string> columna4Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 3, 1);
+            //List<string> columna5Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 4, 1);
+            //List<string> columna6Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 5, 1);
 
-            List<string> columna1Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 0, 6);
-            List<string> columna2Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 1, 6);
-            List<string> columna3Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 2, 6);
-            List<string> columna4Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 3, 6);
-            List<string> columna5Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 4, 6);
-            List<string> columna6Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 5, 6);
+            List<string> columna1Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 0, 1);
+            List<string> columna2Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 1, 1);
+            List<string> columna3Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 2, 1);
+            List<string> columna4Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 3, 1);
+            //List<string> columna5Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 4, 1);
+            //List<string> columna6Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 5, 1);
 
             //Insertando la información de fechas
 
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 0, 0, columna1Hoja1, 1);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 1, 0, columna2Hoja1, 1);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 2, 0, columna3Hoja1, 1);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 3, 0, columna4Hoja1, 1);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 4, 0, columna5Hoja1, 1);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 5, 0, columna6Hoja1, 1);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 0, 0, columna1Hoja1, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 1, 0, columna2Hoja1, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 2, 0, columna3Hoja1, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 3, 0, columna4Hoja1, 6);
+            //modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 4, 0, columna5Hoja1, 6);
+            //modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 5, 0, columna6Hoja1, 6);
 
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 0, 1, columna1Hoja2, 0);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 1, 1, columna2Hoja2, 0);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 2, 1, columna3Hoja2, 0);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 3, 1, columna4Hoja2, 0);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 4, 1, columna5Hoja2, 0);
-            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 5, 1, columna6Hoja2, 0);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 0, 1, columna1Hoja2, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 1, 1, columna2Hoja2, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 2, 1, columna3Hoja2, 6);
+            modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 3, 1, columna4Hoja2, 6);
+            //modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 4, 1, columna5Hoja2, 6);
+            //modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 5, 1, columna6Hoja2, 6);
 
             //Cambiando el orden de los movimientos (HOJA 1 Y 2)
 
@@ -385,15 +385,15 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Dando formato a las columnas HOJA 1
 
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 0);
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 0);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 0);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 0);
 
             //Dando formato a las columnas HOJA 2
 
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 1);
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
-            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 1);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
+            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
 
             //Ajustando tamaño de las columnas HOJA 1
 
@@ -412,8 +412,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Cambiando formato de referencias
 
-            modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 0);
-            modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 1);
+            //modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 0);
+            //modifyFunctions.ConvertColumnToGeneral(ExcelFilePath.Text, 3, 1);
 
             //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
 
