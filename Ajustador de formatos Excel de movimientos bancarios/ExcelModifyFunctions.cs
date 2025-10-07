@@ -90,13 +90,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     }
                     else if (BankSelector.Text.Equals("Mercantil (Modificar)"))
                     {
-                        if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 1)
+                        if (bancoMercantil.bankValidatorNewVersion(ExcelFilePath.Text) == 1)
                         {
 
-                            bancoMercantil.fixFormat(ExcelFilePath);
+                            bancoMercantil.fixFormatNewVersion(ExcelFilePath);
 
                         }
-                        else if (bancoMercantil.bankValidator(ExcelFilePath.Text) == 2)
+                        else if (bancoMercantil.bankValidatorNewVersion(ExcelFilePath.Text) == 2)
                         {
                             MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
@@ -1601,6 +1601,53 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        public List<string> CopyDateColumnsAsStringsMercantil(string rutaArchivo, int sheetName, int columna, int startingRow)
+        {
+            List<string> listaStrings = new List<string>();
+
+            try
+            {
+                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
+                {
+                    IWorkbook libro = new XSSFWorkbook(archivo);
+                    string nombreHoja = libro.GetSheetAt(sheetName).SheetName;
+                    ISheet hoja = libro.GetSheet(nombreHoja);
+                    int ultimaFila = hoja.LastRowNum;
+
+                    for (int i = startingRow; i <= ultimaFila; i++)
+                    {
+                        IRow fila = hoja.GetRow(i);
+                        if (fila != null)
+                        {
+                            ICell celda = fila.GetCell(columna);
+                            if (celda == null || celda.Equals(""))
+                            {
+                                listaStrings.Add(""); // Agregar cadena vacía si la celda es nula
+                            }
+                            if (celda != null && !celda.Equals(""))
+                            {
+                                // Convertir el valor de la celda a string
+                                string valorCelda = getCellValueAsStringII(celda);
+                                listaStrings.Add(valorCelda);
+                            }
+
+                        }
+                        else
+                        {
+                            listaStrings.Add(""); // Agregar cadena vacía si la fila es nula
+                        }
+                    }
+                }
+
+                return listaStrings;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al copiar: {ex.Message}");
+                return null;
+            }
+        }
+
         public string getCellValueAsStringII(ICell celda)
         {
             switch (celda.CellType)
@@ -1629,7 +1676,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public void changeCellTextFromListInReverseOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
+        public void changeCellTextFromListInReverseOrderMercantilOldVersion(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
         {
             try
             {
@@ -1676,6 +1723,52 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        public void changeCellTextFromListInReverseOrderMercantilNewVersion(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1, int startingRow)
+        {
+            try
+            {
+                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
+                {
+                    IWorkbook libro = new XSSFWorkbook(archivo);
+                    string nombreHoja = libro.GetSheetAt(nHoja).SheetName;
+                    ISheet hoja = libro.GetSheet(nombreHoja);
+
+                    int inverseIndex = listaColumna1.Count();
+
+                    for (int i = startingRow; i < listaColumna1.Count; i++)
+                    {
+                        IRow filaObj = hoja.GetRow(i);
+                        ICell celda = filaObj.GetCell(columna);
+
+                        if (celda == null)
+                        {
+                            celda = filaObj.CreateCell(columna);
+                        }
+
+                        inverseIndex = inverseIndex - 1;
+
+                        // 6. Cambiar el texto de la celda
+                        celda.SetCellValue(listaColumna1[inverseIndex]);
+
+
+                    }
+
+
+
+
+                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
+                    {
+                        libro.Write(archivoSalida);
+                    }
+                }
+
+                Console.WriteLine("Texto de celda cambiado, formato y estilo aplicados exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al cambiar texto de celda o aplicar formato/estilo: " + ex.Message);
+            }
+        }
         public void changeCellTextFromListInTheSameOrder(string rutaArchivo, int columna, int nHoja, List<string> listaColumna1)
         {
             try

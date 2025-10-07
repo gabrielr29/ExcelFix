@@ -10,7 +10,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 {
     internal class BDV
     {
-        ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
+        
 
         public int bankValidator(string rutaArchivo)
         {
@@ -75,6 +75,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
         public void fixFormat(TextBox ExcelFilePath)
         {
+            ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
             modifyFunctions.InsertColumnBetweenTwoCaseBanesco(ExcelFilePath.Text, 5);
             modifyFunctions.MoveColumnsCaseBVnzlaBExterior(ExcelFilePath.Text, 6, 5, 3, 0);

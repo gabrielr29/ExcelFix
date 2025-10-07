@@ -11,10 +11,11 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
     internal class Banesco
     {
 
-        ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
+        
 
         public int bankValidator(string rutaArchivo)
         {
+            ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
             try
             {
                 using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
@@ -71,6 +72,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
         public void fixFormat(TextBox ExcelFilePath)
         {
+            ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
             // El archivo no está abierto por otro proceso se procede a la ejecución
 

@@ -11,9 +11,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 {
     internal class Exterior
     {
-
-        ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
-
+                
         public int BankValidator(string rutaArchivo)
         {
 
@@ -28,7 +26,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                     IRow fila = hoja.GetRow(0);
                     if (fila != null)
                     {
-                        string nCuenta = ExcelModifyFunctions.getValueCellString(fila.GetCell(1));
+                        string nCuenta = ExcelModifyFunctions.getValueCellString(fila.GetCell(0));
                         string validacion = ExcelModifyFunctions.getValueCellString(fila.GetCell(15));
 
 
@@ -68,6 +66,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
         public void fixFormat(TextBox ExcelFilePath)
         {
+            ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
             List<string> listaColumnaFechas = modifyFunctions.CopyDateColumnsAsStrings(ExcelFilePath.Text, 0, 1);
 
@@ -169,6 +168,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                     IWorkbook libro = new XSSFWorkbook(archivo);
                     string nombreHoja = libro.GetSheetAt(nHoja).SheetName;
                     ISheet hoja = libro.GetSheet(nombreHoja);
+                    ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
                     for (int filaIndex = filaIndexStart; filaIndex <= hoja.LastRowNum; filaIndex++)
                     {
@@ -255,6 +255,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                     IWorkbook libro = new XSSFWorkbook(archivo);
                     string nombreHoja = libro.GetSheetAt(0).SheetName;
                     ISheet hoja = libro.GetSheet(nombreHoja);
+                    ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
 
                     // Obtener el estilo de la celda origen (solo una vez)
                     ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(1); // Celda de ejemplo para obtener el estilo
