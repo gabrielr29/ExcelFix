@@ -383,17 +383,21 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             modifyFunctions.InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 0);
             modifyFunctions.InsertColumnBetweenTwoVersionC3(ExcelFilePath.Text, 2, 1);
 
+            //Separar nùmeross positivos de negativos
+            modifyFunctions.MoveNegativesNumbersCaseBanesco(ExcelFilePath.Text, 5, 6);
+     
+
             //Dando formato a las columnas HOJA 1
 
             //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 0);
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 0);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 0);
 
             //Dando formato a las columnas HOJA 2
 
             //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 7, 1);
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
 
             //Ajustando tamaño de las columnas HOJA 1
 

@@ -253,7 +253,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     ISheet hoja = libro.GetSheet(nombreHoja);
 
                     // Obtener el estilo de la celda origen (solo una vez)
-                    ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(columnaOrigen - 1); // Celda de ejemplo para obtener el estilo
+                    ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(columnaOrigen - 1); 
                     ICellStyle? estiloOrigen = null;
 
                     // Crear un estilo para el formato numérico
@@ -494,11 +494,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                     celdaOrigen.CellStyle = estiloOrigen;
                                     celdaOrigen.CellStyle.DataFormat = estiloCero.DataFormat;
                                 }
-                                //else if(celdaOrigen == null || celdaOrigen.CellType == CellType.Blank || ObtenerValorCeldaComoString(celdaOrigen).Equals("")){
-                                //    celdaOrigen.SetCellValue(0);
-                                //    celdaOrigen.CellStyle = estiloOrigen;
-                                //    celdaOrigen.CellStyle.DataFormat = estiloCero.DataFormat;
-                                //}
+
                             }
                         }
                     }
@@ -1613,7 +1609,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     string nombreHoja = libro.GetSheetAt(sheetName).SheetName;
                     ISheet hoja = libro.GetSheet(nombreHoja);
                     int ultimaFila = hoja.LastRowNum;
-                    MessageBox.Show(ultimaFila.ToString(), "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 
                     for (int i = startingRow; i <= ultimaFila; i++)
