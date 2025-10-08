@@ -302,7 +302,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 1, 5);
 
             //Añadiendo identificadores
-
             modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 16, "Archivo modificado, Mercantil");
             modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 0, 17, "Fecha de modificación:" + DateTime.Now.ToString());
             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -325,15 +324,11 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             List<string> columna2Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 1, 1);
             List<string> columna3Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 2, 1);
             List<string> columna4Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 3, 1);
-            //List<string> columna5Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 4, 1);
-            //List<string> columna6Hoja1 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 0, 5, 1);
 
             List<string> columna1Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 0, 1);
             List<string> columna2Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 1, 1);
             List<string> columna3Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 2, 1);
             List<string> columna4Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 3, 1);
-            //List<string> columna5Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 4, 1);
-            //List<string> columna6Hoja2 = modifyFunctions.CopyDateColumnsAsStringsMercantil(ExcelFilePath.Text, 1, 5, 1);
 
             //Insertando la información de fechas
 
@@ -346,7 +341,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 1, 1, columna2Hoja2, 6);
             modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 2, 1, columna3Hoja2, 6);
             modifyFunctions.changeCellTextFromListInReverseOrderMercantilNewVersion(ExcelFilePath.Text, 3, 1, columna4Hoja2, 6);
-
 
             //Cambiando el orden de los movimientos (HOJA 1 Y 2)
 
@@ -415,9 +409,13 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 4, 50, 1);
             modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 3, 30, 1);
 
-
             //Añadiendo identificadores
 
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 6, 1, "Fecha de validación");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 6, 2, "Referencia");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 6, 3, "Descripcion");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 6, 4, "Ingresos");
+            modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 6, 5, "Egresos");
             modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 3, 16, "Archivo modificado, Mercantil");
             modifyFunctions.ChangeCellTextWithFormatAndStyle(ExcelFilePath.Text, 3, 17, "Fecha de modificación:" + DateTime.Now.ToString());
             MessageBox.Show("Ajustes realizados exitosamente", "Proceso finalizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
