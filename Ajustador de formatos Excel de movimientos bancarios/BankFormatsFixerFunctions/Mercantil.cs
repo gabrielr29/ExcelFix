@@ -382,9 +382,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Separar nùmeros positivos de negativos Hoja 1 y 2
 
-            moveNegativeMovs(ExcelFilePath.Text, 5, 6,0);
-            //modifyFunctions.MoveNegativesNumbersCaseBanesco(ExcelFilePath.Text, 5, 6, 1);
-           
+            moveNegativeMovs(ExcelFilePath.Text, 4, 5,0);
+
             //Dando formato a las columnas HOJA 1
 
             modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 0);
@@ -392,8 +391,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Dando formato a las columnas HOJA 2
              
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
-            //modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 6, 1);
+            modifyFunctions.FormatNumericColumn(ExcelFilePath.Text, 5, 1);
 
             //Corrigiendo formato de fecha HOJA 1 Y 2
 
@@ -402,19 +401,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
             //Reparando formato de las celdas en blanco (para que no se dañe la fórmula)
 
-            //modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 4);
-            //modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 5);
-            //modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 1, 4);
-            //modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 1, 5);
-
-
-            //Dando formato a las celdas con ceros
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 4, 0);
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 5, 0);
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 6, 0);
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 4, 1);
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 5, 1);
-            //modifyFunctions.applyZeroStyleToColumn(ExcelFilePath.Text, 6, 1);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 4);
+            modifyFunctions.replaceEmptyCellsWithZero(ExcelFilePath.Text, 0, 5);
 
             //Ajustando ancho de las celdas Hoja 1 y 2
             modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 6, 14, 0);
@@ -437,87 +425,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 
         }
 
-        //public void moveNegativeMovs(string rutaArchivo, int columnaOrigen, int columnaDestino)
-        //{
-        //    try
-        //    {
-        //        using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-        //        {
-        //            IWorkbook libro = new XSSFWorkbook(archivo);
-        //            string nombreHoja = libro.GetSheetAt(0).SheetName;
-        //            ISheet hoja = libro.GetSheet(nombreHoja);
-        //            ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();
-
-        //            // Obtener el estilo de la celda origen (solo una vez)
-        //            ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(1); 
-        //            ICellStyle? estiloOrigen = null;
-
-        //            if (celdaOrigenEjemplo != null)
-        //            {
-        //                estiloOrigen = celdaOrigenEjemplo.CellStyle;
-        //                modifyFunctions.CopyCellStyle(celdaOrigenEjemplo.CellStyle, libro);
-        //            }
-
-        //            ICellStyle estiloCero = libro.CreateCellStyle();
-        //            estiloCero = estiloOrigen;
-
-        //            estiloCero.DataFormat = libro.CreateDataFormat().GetFormat("0;-0;;@");
-
-
-        //            for (int filaIndex = 0; filaIndex <= hoja.LastRowNum; filaIndex++)
-        //            {
-        //                IRow fila = hoja.GetRow(filaIndex);
-        //                if (fila != null)
-        //                {
-                         
-        //                    ////ICell celdaSimbolo = fila.GetCell(columnaSimbolos - 1);
-        //                    ////ICell celdaNumero = fila.GetCell(columnaNumeros - 1);
-
-        //                    //if (celdaSimbolo != null && celdaNumero != null)
-        //                    //{
-        //                    //    string simbolo = celdaSimbolo.StringCellValue?.Trim();
-
-        //                    //    if (simbolo == "+")
-        //                    //    {
-        //                    //        // Dejar la celda en blanco
-        //                    //        celdaSimbolo.SetCellValue(0);
-        //                    //        celdaSimbolo.CellStyle = estiloCero;
-        //                    //    }
-        //                    //    else if (simbolo == "-")
-        //                    //    {
-        //                    //        // Mover el número a la columna de símbolos
-        //                    //        if (celdaNumero.CellType == CellType.Numeric)
-        //                    //        {
-        //                    //            celdaSimbolo.SetCellValue(celdaNumero.NumericCellValue);
-        //                    //        }
-        //                    //        else if (celdaNumero.CellType == CellType.String && double.TryParse(celdaNumero.StringCellValue, out double valorNumerico))
-        //                    //        {
-        //                    //            celdaSimbolo.SetCellValue(valorNumerico);
-        //                    //        }
-
-        //                    //        // Limpiar la celda numérica
-        //                    //        celdaNumero.SetCellValue(0);
-        //                    //        celdaNumero.CellStyle = estiloCero;
-        //                        }
-        //                    }
-        //                }
-        //            }
-
-        //            // Guardar los cambios
-        //            using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-        //            {
-        //                libro.Write(archivoSalida);
-        //            }
-        //        }
-        //        Console.WriteLine($"Columnas procesadas exitosamente.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error al procesar columnas: {ex.Message}");
-        //    }
-        //}
-
-           
+                 
 
      public void moveNegativeMovs(string rutaArchivo, int columnaOrigen, int columnaDestino, int nSheet)
         {
@@ -540,11 +448,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                         modifyFunctions.CopyCellStyle(celdaOrigenEjemplo.CellStyle, libro);
                     }
 
-                    ICellStyle estiloCero = libro.CreateCellStyle();
-                    estiloCero = estiloOrigen;
-
-                    estiloCero.DataFormat = libro.CreateDataFormat().GetFormat("0;-0;;@");
-
 
                     foreach (IRow fila in hoja)
                     {
@@ -558,15 +461,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
                                 ICell celdaDestino = fila.CreateCell(columnaDestino);
                                 // Crear un nuevo estilo para la celda destino
                                 ICellStyle estiloDestino = libro.CreateCellStyle();
-                                estiloCero.DataFormat = libro.CreateDataFormat().GetFormat("0;-0;;@");
                                 celdaDestino.CellStyle = estiloDestino; 
 
 
                                 if (valor < 0)
                                 {
                                     celdaDestino.SetCellValue(valor * -1);
-                                    celdaOrigen.SetCellValue(0);
-                                    celdaOrigen.CellStyle = estiloCero;
+                                    celdaOrigen.SetCellValue(string.Empty);
+                                    
                                 }
 
                             }
