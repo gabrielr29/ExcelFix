@@ -86,7 +86,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
             //Ajustando columna "Referencia"
             modifyFunctions.AdjustColumnWidth(ExcelFilePath.Text, 3, 14, 0);
 
-            modifyFunctions.MoveNegativesNumbersCaseBanesco(ExcelFilePath.Text, 5, 6);
+            modifyFunctions.MoveNegativesNumbersCaseBanesco(ExcelFilePath.Text, 5, 6, 0);
 
             //Modificación personal para facilitar la ubicación:
             /* 

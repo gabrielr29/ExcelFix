@@ -1,5 +1,6 @@
 ﻿using NPOI.HSSF.UserModel;
 using NPOI.OpenXmlFormats;
+using NPOI.SS.Format;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -361,7 +362,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 {
                                     string valorString = getValueCellString(celdaOrigen);
 
-                                        celdaDestino.SetCellValue(celdaOrigen.StringCellValue);
+                                    celdaDestino.SetCellValue(celdaOrigen.StringCellValue);
     
                            
 
@@ -431,15 +432,15 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public void MoveNegativesNumbersCaseBanesco(string rutaArchivo, int columnaOrigen, int columnaDestino)
+        public void MoveNegativesNumbersCaseBanesco(string rutaArchivo, int columnaOrigen, int columnaDestino, int nSheet)
         {
             try
             {
                 using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
                 {
                     IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(0).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
+                    string sheetName = libro.GetSheetAt(nSheet).SheetName;
+                    ISheet hoja = libro.GetSheet(sheetName);
 
                     // Obtener el estilo de la celda origen (solo una vez)
                     ICell celdaOrigenEjemplo = hoja.GetRow(0).GetCell(columnaOrigen - 1); // Celda de ejemplo para obtener el estilo
@@ -510,6 +511,72 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             catch (Exception ex)
             {
                 Console.WriteLine("Error al mover cantidades negativas: " + ex.Message);
+            }
+        }
+
+        public void applyZeroStyleToColumn(string filePath, int columnToIndex, int sheetIndex)
+        {
+            try
+            {
+                int columnIndex = columnToIndex;
+
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    IWorkbook workbook = new XSSFWorkbook(fileStream);
+                    ISheet sheet = workbook.GetSheetAt(sheetIndex);
+
+                    IDataFormat dataFormat = workbook.CreateDataFormat();
+                    ICellStyle zeroStyle = workbook.CreateCellStyle();
+                    zeroStyle.DataFormat = dataFormat.GetFormat("0;-0;;@");
+
+                    foreach (IRow row in sheet)
+                    {
+                        if (row == null) continue;
+
+                        if (row.RowNum == 0) continue;
+
+                        ICell cell = row.GetCell(columnIndex);
+
+                        if (cell != null)
+                        {
+                            try
+                            {
+                                double value = (double)ObtenerValorCeldaDecimal(cell);
+
+                                if (Math.Abs(value) < 0.000001 || cell.NumericCellValue==0.0)
+                                {
+                                    cell.SetCellValue(0);
+                                    cell.CellStyle = zeroStyle;
+
+                                }
+                                else if (cell.CellType == CellType.String && cell.StringCellValue=="0")
+                                {
+                                    cell.SetCellValue(0);
+                                    cell.CellStyle = zeroStyle;
+                                }
+
+                            }
+                            catch (InvalidCastException)
+                            {
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error al procesar celda ({row.RowNum},{columnIndex}): {ex.Message}");
+                            }
+                        }
+                    }
+
+                    fileStream.Position = 0;
+                    fileStream.SetLength(0);
+
+                    workbook.Write(fileStream);
+                }
+
+                Console.WriteLine("Estilo 'Cero' aplicado exitosamente a las celdas con valor 0.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al aplicar el estilo 'Cero': " + ex.Message);
             }
         }
 
