@@ -223,8 +223,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return resultados;
         }
 
-
-
         public static List<string> forLoopSearchByReferenceIII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda)
         {
             List<string> resultados = new List<string>();
@@ -401,40 +399,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        // Mucha redundancia, hay que mejorarla
-        // Por retirar, una vez se valide la calidad de las mejoras implementadas
-        public static List<string> SearchByReferenceII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
-        {
-            List<string> resultados = new List<string>();
-
-            string referenciaBusquedaLower = referenciaBusqueda.Trim().ToLower();
-
-            string DigitosBusqueda = "";
-
-            int digitos = 0;
-
-            if (referenciaBusquedaLower.Length == 6)
-            {
-                DigitosBusqueda = referenciaBusquedaLower.Substring(referenciaBusquedaLower.Length - 6);
-                digitos = 6;
-            }
-            else if (referenciaBusquedaLower.Length == 4)
-            {
-                DigitosBusqueda = referenciaBusquedaLower.Substring(referenciaBusquedaLower.Length - 4);
-                digitos = 4;
-            }
-            else
-            {
-                DigitosBusqueda = referenciaBusquedaLower;
-                digitos = referenciaBusquedaLower.Length;
-            }
-
-
-            resultados = forLoopSearchByReferenceII(startedRowToRevision, referenciaBusquedaLower, digitos, rutaArchivo, DigitosBusqueda);
-
-            return resultados;
-        }
-
         // Por retirar, una vez se valide la calidad de las mejoras implementadas
         public static List<string> forLoopSearchByReferenceII(int startedRowToRevision,string referenciaBusquedaLower, int digitos, string rutaArchivo, string digitosBusqueda)
         {
@@ -529,8 +493,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 return resultados;
             }
         }
-
-       
 
         public static void ReplaceDataGridViewValues(DataGridView dataGridView1, List<string> myList)
         {
@@ -706,43 +668,46 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         //}
 
         // Función para clonar el estilo y aplicar el formato "General", manteniendo bordes y otros atributos pero añadiendo color azul
-        private static ICellStyle CloneSyleAndFormatAndAddColor2(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
-        {
-            ICellStyle newStyle = libro.CreateCellStyle();
 
-            if (OriginalStyle != null)
-            {
-                // Copia los colores de borde
-                newStyle.BottomBorderColor = OriginalStyle.BottomBorderColor;
-                newStyle.TopBorderColor = OriginalStyle.TopBorderColor;
-                newStyle.LeftBorderColor = OriginalStyle.LeftBorderColor;
-                newStyle.RightBorderColor = OriginalStyle.RightBorderColor;
 
-                // Copia alineación, fuente, etc.
-                newStyle.Alignment = OriginalStyle.Alignment;
-                newStyle.VerticalAlignment = OriginalStyle.VerticalAlignment;
-                newStyle.WrapText = OriginalStyle.WrapText;
-                newStyle.FillBackgroundColor = OriginalStyle.FillBackgroundColor;
-                newStyle.ShrinkToFit = OriginalStyle.ShrinkToFit;
-                newStyle.Indention = OriginalStyle.Indention;
-                newStyle.Rotation = OriginalStyle.Rotation;
+        //private static ICellStyle CloneSyleAndFormatAndAddColor2(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
+        //{
+        //    ICellStyle newStyle = libro.CreateCellStyle();
 
-                // Sobreescribiendo sombreado al color necesario
-                newStyle.FillPattern = FillPattern.SolidForeground;
-                newStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
+        //    if (OriginalStyle != null)
+        //    {
+        //        // Copia los colores de borde
+        //        newStyle.BottomBorderColor = OriginalStyle.BottomBorderColor;
+        //        newStyle.TopBorderColor = OriginalStyle.TopBorderColor;
+        //        newStyle.LeftBorderColor = OriginalStyle.LeftBorderColor;
+        //        newStyle.RightBorderColor = OriginalStyle.RightBorderColor;
 
-                // Copia los bordes
-                newStyle.BorderBottom = OriginalStyle.BorderBottom;
-                newStyle.BorderTop = OriginalStyle.BorderTop;
-                newStyle.BorderLeft = OriginalStyle.BorderLeft;
-                newStyle.BorderRight = OriginalStyle.BorderRight;
-            }
+        //        // Copia alineación, fuente, etc.
+        //        newStyle.Alignment = OriginalStyle.Alignment;
+        //        newStyle.VerticalAlignment = OriginalStyle.VerticalAlignment;
+        //        newStyle.WrapText = OriginalStyle.WrapText;
+        //        newStyle.FillBackgroundColor = OriginalStyle.FillBackgroundColor;
+        //        newStyle.ShrinkToFit = OriginalStyle.ShrinkToFit;
+        //        newStyle.Indention = OriginalStyle.Indention;
+        //        newStyle.Rotation = OriginalStyle.Rotation;
 
-            // Asigna el formato "General" o el formato original
-            newStyle.DataFormat = generalOrOriginal ? formato.GetFormat("General") : OriginalStyle.DataFormat;
+        //        // Sobreescribiendo sombreado al color necesario
+        //        newStyle.FillPattern = FillPattern.SolidForeground;
+        //        newStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
 
-            return newStyle;
-        }
+        //        // Copia los bordes
+        //        newStyle.BorderBottom = OriginalStyle.BorderBottom;
+        //        newStyle.BorderTop = OriginalStyle.BorderTop;
+        //        newStyle.BorderLeft = OriginalStyle.BorderLeft;
+        //        newStyle.BorderRight = OriginalStyle.BorderRight;
+        //    }
+
+        //    // Asigna el formato "General" o el formato original
+        //    newStyle.DataFormat = generalOrOriginal ? formato.GetFormat("General") : OriginalStyle.DataFormat;
+
+        //    return newStyle;
+        //}
+
         public static string CheckCellType(ICell celda)
         {
             if (celda == null)
