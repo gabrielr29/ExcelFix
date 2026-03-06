@@ -10,9 +10,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BankFormatsFixerF
 {
     internal class Banesco
     {
-
-        
-
+                
         public int bankValidator(string rutaArchivo)
         {
             ExcelModifyFunctions modifyFunctions = new ExcelModifyFunctions();

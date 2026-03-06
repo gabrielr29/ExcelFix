@@ -30,6 +30,103 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         public void AttachExcelFile(ComboBox BankSelector, TextBox ExcelFilePath)
         {
+            string selectedBank = BankSelector.Text;
+            string filePath = ExcelFilePath.Text;
+
+
+            if (FileAccessC.IsOpen(ExcelFilePath.Text))
+            {
+
+            }
+
+            else
+            {
+
+                if (Path.GetExtension(filePath).Equals(".xls"))
+                {
+
+                    MessageBox.Show("No se admite ese formato, realiza una conversión al formato XLSX", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                }
+
+                switch (selectedBank)
+                {
+                    case "Banesco (Modificar)":
+                        HandleBankFix(bancoBanesco.bankValidator(filePath), () => bancoBanesco.fixFormat(ExcelFilePath), "Bco Banesco");
+                        break;
+
+                    case "Banco de Venezuela (Modificar)":
+                        HandleBankFix(bancoVenezuela.bankValidator(filePath), () => bancoVenezuela.fixFormat(ExcelFilePath), "Bco Vnzla");
+                        break;
+
+                    case "Mercantil (Modificar)":
+                        HandleBankFix(bancoMercantil.bankValidatorNewVersion(filePath), () => bancoMercantil.fixFormatNewVersion(ExcelFilePath), "Mercantil");
+                        break;
+
+                    case "Exterior (Modificar)":
+                        HandleBankFix(bancoExterior.BankValidator(filePath), () => bancoExterior.fixFormat(ExcelFilePath), "Exterior");
+                        break;
+
+                    case "Banesco (Ubicar duplicados)":
+                        ShowDuplicateRows(checkRepetedRows(filePath, 4));
+                        break;
+
+                    case "Banco de Vnzla/Exterior (Ubicar duplicados)":
+                        ShowDuplicateRows(checkRepetedRows(filePath, 3));
+                        break;
+
+                    case "Vzla (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 0, 4));
+                        break;
+
+                    case "Exterior (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 1, 3));
+                        break;
+
+                    case "Mercantil C1 (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 2, 3));
+                        break;
+
+                    case "Mercantil C2 (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 3, 3));
+                        break;
+
+                    case "Mercantil C3 (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 4, 3));
+                        break;
+
+                    case "Banesco (Ubicar duplicados - doc general)":
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(filePath, 5, 3));
+                        break;
+
+                    default:
+                        MessageBox.Show("Selecciona un formato válido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        break;
+                }
+
+            }
+
+            
+        }
+
+        private void HandleBankFix(int validationResult, Action fixAction, string bankName)
+        {
+            switch (validationResult)
+            {
+                case 1:
+                    fixAction();
+                    break;
+                case 2:
+                    MessageBox.Show("Este archivo ya ha sido modificado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                default:
+                    MessageBox.Show($"Error al verificar formato {bankName}, verifique el archivo seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+            }
+        }
+
+        public void AttachExcelFileBackUpOldVersion(ComboBox BankSelector, TextBox ExcelFilePath)
+        {
 
             if (FileAccessC.IsOpen(ExcelFilePath.Text))
             {
@@ -107,7 +204,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             MessageBox.Show("Error al verificar formato Mercantil, verifique el archivo seleccionado", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
                         }
-                     
+
 
                     }
 
@@ -148,7 +245,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
 
                     }
-                    else if (BankSelector.Text.Equals("Vzla (Ubicar duplicados - doc general)")){
+                    else if (BankSelector.Text.Equals("Vzla (Ubicar duplicados - doc general)"))
+                    {
 
                         ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(ExcelFilePath.Text, 0, 4));
 
@@ -156,7 +254,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     else if (BankSelector.Text.Equals("Exterior (Ubicar duplicados - doc general)"))
                     {
 
-                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(ExcelFilePath.Text,1, 3));
+                        ShowDuplicateRows(LookForDuplicateRowsGeneralDocument(ExcelFilePath.Text, 1, 3));
 
                     }
                     else if (BankSelector.Text.Equals("Mercantil C1 (Ubicar duplicados - doc general)"))

@@ -16,18 +16,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 {
     internal class MovValidatorFunctions
     {
-
-        private static string FormatValidationDate(DateTime validationDate)
-        {
-            if (!validationDate.Equals(DateTime.MinValue))
-            {
-                string fechaValidacionFormateada = validationDate.ToString("dd/MM/yyyy");
-                return fechaValidacionFormateada;
-            }
-            
-            return "";
-        }
-
         public static DateTime ConvertirStringADateTime(string fechaString)
         {
             string formato = "dd/MM/yyyy";
@@ -42,88 +30,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 Console.WriteLine($"Error al convertir la fecha: {ex.Message}");
                 return DateTime.MinValue; // Retorna DateTime.MinValue en caso de error.
             }
-        }
-
-        public static List<string> SearchByReferenceAndMount(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
-        {
-            List<string> datosFilaEncontrada = new List<string>();
-            ExcelModifyFunctions functions = new ExcelModifyFunctions();
-
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
-
-                    for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
-                    {
-                        IRow fila = hoja.GetRow(i);
-                        if (fila != null)
-                        {
-                            string referencia = ExcelModifyFunctions.getValueCellString(fila.GetCell(2)).Trim().ToLower();
-                            decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
-                            decimal egresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(5));
-
-                            if (referencia == referenciaBusqueda.Trim().ToLower() && (ingresos == montoBusqueda && egresos == 0))
-                            {
-
-                                string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
-                                string numeroFactura = ExcelModifyFunctions.getValueCellString(fila.GetCell(7));
-                                string codigoCliente = ExcelModifyFunctions.getValueCellString(fila.GetCell(8));
-
-                                string fechaValidacionFormateada = "";
-                                ICell fechaValidacionCell = fila.GetCell(1);
-
-                                if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
-                                {
-                                    DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
-                                    fechaValidacionFormateada = fechaValidacion.ToString("dd/MM/yyyy");
-                                }
-                                else
-                                {
-                                    fechaValidacionFormateada = ExcelModifyFunctions.getValueCellString(fechaValidacionCell);
-                                }
-
-                                if (CheckCellType(fila.GetCell(0)).Equals("Fecha"))
-                                {
-                                    DateTime fecha = functions.ObtenerValorCeldaFecha(fila.GetCell(0));
-                                    string fechaFormateada = fecha.ToString("dd/MM/yyyy");
-                                    datosFilaEncontrada.Add($"{fechaFormateada}");
-                                }
-
-                                else
-                                {
-                                    string fecha = ExcelModifyFunctions.getValueCellString(fila.GetCell(0));
-                                    datosFilaEncontrada.Add($"{fecha}");
-                                }
-                                                                
-                                datosFilaEncontrada.Add($"{fechaValidacionFormateada}");
-                                datosFilaEncontrada.Add($"{referencia}");
-                                datosFilaEncontrada.Add($"{descripcion}");
-                                datosFilaEncontrada.Add($"{ingresos}");
-                                datosFilaEncontrada.Add($"{egresos}");
-                                datosFilaEncontrada.Add($"{numeroFactura}");
-                                datosFilaEncontrada.Add($"{codigoCliente}");
-                                datosFilaEncontrada.Add($"{i}");
-
-                                break; // Solo buscamos la primera coincidencia
-                            }
-                        }
-                    }
-
-                    if (datosFilaEncontrada.Count == 0)
-                    {
-                        datosFilaEncontrada.Add("No se encontró ninguna fila con la referencia y monto indicados.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                datosFilaEncontrada.Add("Error al buscar la fila: " + ex.Message);
-            }
-
-            return datosFilaEncontrada;
         }
 
         public static List<string> SearchByMount(string rutaArchivo, int startedRowToRevision, decimal montoBusqueda)
@@ -230,8 +136,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (referencia == referenciaBusqueda.Trim().ToLower() && egresosToCompare == 0)
                             {
-                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fila.GetCell(1));
-                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
 
                                 string descripcion = ExcelModifyFunctions.getValueCellString(fila.GetCell(3)).Trim();
                                 decimal ingresos = functions.ObtenerValorCeldaDecimal(fila.GetCell(4));
@@ -356,9 +260,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                             if (coincidenciaUltimosDigitos && egresosToCompare == 0)
                             {
 
-                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
-                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
-
                                 string fechaValidacionFormateada = "";
 
                                 if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
@@ -446,9 +347,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                             if (coincidenciaUltimosDigitos && ingresos == montoBusqueda && egresosToCompare == 0)
                             {
-
-                                //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
-                                //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
 
                                 string fechaValidacionFormateada = "";
 
@@ -575,9 +473,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 if (coincidenciaUltimosDigitos && egresosToCompare == 0)
                                 {
 
-                                    //DateTime fechaValidacion = functions.ObtenerValorCeldaFecha(fechaValidacionCell);
-                                    //string fechaValidacionFormateada = FormatValidationDate(fechaValidacion);
-
                                     string fechaValidacionFormateada = "";
                                    
                                     if (CheckCellType(fechaValidacionCell).Equals("Fecha"))
@@ -670,7 +565,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         {
             if (dataGridView == null || dataGridView.Rows.Count == 0)
             {
-                return; // Do nothing if the DataGridView is null or has no rows
+                return; 
             }
 
             foreach (DataGridViewRow row in dataGridView.Rows)
@@ -691,135 +586,124 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public static void UpdateCellsByRow(string rutaArchivo, int numeroFila, DateTime fecha, DateTime fechaValidacion, string billNumer, string codigoCliente)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.ReadWrite))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
+        //public static void UpdateCellsByRow(string rutaArchivo, int numeroFila, DateTime fecha, DateTime fechaValidacion, string billNumer, string codigoCliente)
+        //{
+        //    try
+        //    {
+        //        using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.ReadWrite))
+        //        {
+        //            IWorkbook libro = new XSSFWorkbook(archivo);
+        //            ISheet hoja = libro.GetSheetAt(0);
 
-                    IDataFormat formato = libro.CreateDataFormat();
+        //            IDataFormat formato = libro.CreateDataFormat();
 
-                    //Estilo con formato general y coloreado Azul
+        //            //Estilo con formato general y coloreado Azul
 
-                    IRow fila = hoja.GetRow(numeroFila);
-                    if (fila == null)
-                        fila = hoja.CreateRow(numeroFila);
+        //            IRow fila = hoja.GetRow(numeroFila);
+        //            if (fila == null)
+        //                fila = hoja.CreateRow(numeroFila);
 
-                    //Fecha (columna 0)
-                    ICell dateCell = fila.GetCell(0) ?? fila.CreateCell(1);
-                    dateCell.SetCellValue(fecha.Date);
-                    dateCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
-                    //CloneSyleAndFormatAndAddColor(libro, dateCell.CellStyle, formato, true);
-                    dateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
-                    dateCell.CellStyle.WrapText = true;
+        //            //Fecha (columna 0)
+        //            ICell dateCell = fila.GetCell(0) ?? fila.CreateCell(1);
+        //            dateCell.SetCellValue(fecha.Date);
+        //            dateCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, dateCell.CellStyle, formato, true);
+        //            dateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
+        //            dateCell.CellStyle.WrapText = true;
 
-                    // Fecha de Validación (columna 1)
-                    ICell validationDateCell = fila.GetCell(1) ?? fila.CreateCell(1);
-                    validationDateCell.SetCellValue(fechaValidacion.Date);
-                    validationDateCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
-                    //CloneSyleAndFormatAndAddColor(libro, validationDateCell.CellStyle, formato, true);
-                    validationDateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
-                    validationDateCell.CellStyle.WrapText = true;
+        //            // Fecha de Validación (columna 1)
+        //            ICell validationDateCell = fila.GetCell(1) ?? fila.CreateCell(1);
+        //            validationDateCell.SetCellValue(fechaValidacion.Date);
+        //            validationDateCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, validationDateCell.CellStyle, formato, true);
+        //            validationDateCell.CellStyle.DataFormat = formato.GetFormat("dd/MM/yyyy");
+        //            validationDateCell.CellStyle.WrapText = true;
 
-                    // Número de Factura (columna 7)
-                    ICell billCell = fila.GetCell(7) ?? fila.CreateCell(7);
-                    billCell.SetCellValue(billNumer);
-                    billCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
-                    //CloneSyleAndFormatAndAddColor(libro, billCell.CellStyle, formato, true);
-                    billCell.CellStyle.WrapText = true;
+        //            // Número de Factura (columna 7)
+        //            ICell billCell = fila.GetCell(7) ?? fila.CreateCell(7);
+        //            billCell.SetCellValue(billNumer);
+        //            billCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, billCell.CellStyle, formato, true);
+        //            billCell.CellStyle.WrapText = true;
 
-                    // Código de Cliente (columna 8)
-                    ICell clientCell = fila.GetCell(8) ?? fila.CreateCell(8);
-                    clientCell.SetCellValue(codigoCliente);
-                    clientCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
-                    //CloneSyleAndFormatAndAddColor(libro, clientCell.CellStyle, formato, true);
-                    clientCell.CellStyle.WrapText = true;
+        //            // Código de Cliente (columna 8)
+        //            ICell clientCell = fila.GetCell(8) ?? fila.CreateCell(8);
+        //            clientCell.SetCellValue(codigoCliente);
+        //            clientCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, clientCell.CellStyle, formato, true);
+        //            clientCell.CellStyle.WrapText = true;
 
-                    //Celdas restantes(columna 6, 5, 4, 3, 2, 0)
-                    ICell originalDateCell = fila.GetCell(0) ?? fila.CreateCell(0);
-                    originalDateCell.CellStyle = validationDateCell.CellStyle;
+        //            //Celdas restantes(columna 6, 5, 4, 3, 2, 0)
+        //            ICell originalDateCell = fila.GetCell(0) ?? fila.CreateCell(0);
+        //            originalDateCell.CellStyle = validationDateCell.CellStyle;
                     
-                    ICell referenceCell = fila.GetCell(2) ?? fila.CreateCell(2);
-                    referenceCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
-                        //CloneSyleAndFormatAndAddColor(libro, referenceCell.CellStyle, formato, false);
+        //            ICell referenceCell = fila.GetCell(2) ?? fila.CreateCell(2);
+        //            referenceCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, referenceCell.CellStyle, formato, false);
 
-                    ICell descriptionCell = fila.GetCell(3) ?? fila.CreateCell(3);
-                    descriptionCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
-                        //CloneSyleAndFormatAndAddColor(libro, descriptionCell.CellStyle, formato, false);
+        //            ICell descriptionCell = fila.GetCell(3) ?? fila.CreateCell(3);
+        //            descriptionCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, descriptionCell.CellStyle, formato, false);
 
-                    ICell incomesCell = fila.GetCell(4) ?? fila.CreateCell(4);
-                    incomesCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
-                    //CloneSyleAndFormatAndAddColor(libro, incomesCell.CellStyle, formato, false);
+        //            ICell incomesCell = fila.GetCell(4) ?? fila.CreateCell(4);
+        //            incomesCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, incomesCell.CellStyle, formato, false);
 
-                    ICell expensesCell = fila.GetCell(5) ?? fila.CreateCell(5);
+        //            ICell expensesCell = fila.GetCell(5) ?? fila.CreateCell(5);
 
-                    expensesCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro,expensesCell.CellStyle,formato, false);
-                        //CloneSyleAndFormatAndAddColor(libro, expensesCell.CellStyle, formato, false);
+        //            expensesCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, expensesCell.CellStyle, formato, false);
 
-                    ICell balanceCell = fila.GetCell(6) ?? fila.CreateCell(6);
+        //            ICell balanceCell = fila.GetCell(6) ?? fila.CreateCell(6);
 
-                    balanceCell.CellStyle = NPOIStyleHelper.CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
-                    //CloneSyleAndFormatAndAddColor(libro, balanceCell.CellStyle, formato, false);
+        //            balanceCell.CellStyle = CloneSyleAndFormatAndAddColor2(libro, balanceCell.CellStyle, formato, false);
 
+        //            // Calcular la altura manualmente *solo si hace falta
+        //            if (billNumer.Length >= 28 && billNumer.Length <= 58)
+        //            {
+        //                int necesaryHeight = 40;
+        //                fila.HeightInPoints = necesaryHeight;
+        //            }
+        //            else if(billNumer.Length >= 59 && billNumer.Length <= 89)
+        //            {
+        //                int alturaNecesaria = 60;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 90 && billNumer.Length <= 120)
+        //            {
+        //                int alturaNecesaria = 80;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 121 && billNumer.Length <= 151)
+        //            {
+        //                int alturaNecesaria = 100;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 152 && billNumer.Length <= 182)
+        //            {
+        //                int alturaNecesaria = 120;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 183 && billNumer.Length <= 213)
+        //            {
+        //                int alturaNecesaria = 140;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 214 && billNumer.Length <= 234)
+        //            {
+        //                int alturaNecesaria = 160;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
+        //            else if (billNumer.Length >= 235 && billNumer.Length <= 255)
+        //            {
+        //                int alturaNecesaria = 180;
+        //                fila.HeightInPoints = alturaNecesaria;
+        //            }
 
-                    //Ajustando el tamaño de la fila para que entren los registros de código de factura
-                    // Calcular la altura manualmente *solo si hace falta
-                    if (billNumer.Length >= 28 && billNumer.Length <= 58)
-                    {
-                        int necesaryHeight = 40;
-                        fila.HeightInPoints = necesaryHeight;
-                    }
-                    else if(billNumer.Length >= 59 && billNumer.Length <= 89)
-                    {
-                        int alturaNecesaria = 60;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 90 && billNumer.Length <= 120)
-                    {
-                        int alturaNecesaria = 80;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 121 && billNumer.Length <= 151)
-                    {
-                        int alturaNecesaria = 100;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 152 && billNumer.Length <= 182)
-                    {
-                        int alturaNecesaria = 120;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 183 && billNumer.Length <= 213)
-                    {
-                        int alturaNecesaria = 140;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 214 && billNumer.Length <= 234)
-                    {
-                        int alturaNecesaria = 160;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-                    else if (billNumer.Length >= 235 && billNumer.Length <= 255)
-                    {
-                        int alturaNecesaria = 180;
-                        fila.HeightInPoints = alturaNecesaria;
-                    }
-
-                    // Guardar cambios
-                    using (FileStream salida = new FileStream(rutaArchivo, FileMode.Create, FileAccess.Write))
-                    {
-                        libro.Write(salida);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al actualizar las celdas: " + ex.Message);
-            }
-        }
+        //            // Guardar cambios
+        //            using (FileStream salida = new FileStream(rutaArchivo, FileMode.Create, FileAccess.Write))
+        //            {
+        //                libro.Write(salida);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error al actualizar las celdas: " + ex.Message);
+        //    }
+        //}
 
         // Función para clonar el estilo y aplicar el formato "General", manteniendo bordes y otros atributos pero añadiendo color azul
         private static ICellStyle CloneSyleAndFormatAndAddColor2(IWorkbook libro, ICellStyle OriginalStyle, IDataFormat formato, bool generalOrOriginal)
@@ -903,8 +787,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 FileInfo archivoOrigen = new FileInfo(rutaArchivoOrigen);
                 string nombreArchivo = Path.GetFileNameWithoutExtension(rutaArchivoOrigen);
                 string extensionArchivo = archivoOrigen.Extension;
-
-                // Obtener la fecha y hora actual y formatearla para el nombre del archivo
                 string fechaHoraActual = DateTime.Now.ToString("yyyyMMdd_HHmmss");
 
                 // Eliminar caracteres no válidos para nombres de archivo en Windows
@@ -927,6 +809,107 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
+        // Definir el diccionario a nivel de clase para que persista durante la ejecución
+        private static Dictionary<string, ICellStyle> _styleCache = new Dictionary<string, ICellStyle>();
+
+        private static ICellStyle GetCachedStyle(IWorkbook libro, ICellStyle original, IDataFormat df, bool isGeneral, string customFormat)
+        {
+            // 1. Generar la llave
+            string formatKey = customFormat ?? (isGeneral ? "General" : "Original");
+            string key = $"{original?.Index ?? 0}_{isGeneral}_{formatKey}";
+
+            // 2. Intentar obtener el estilo del caché de forma segura
+            if (_styleCache.TryGetValue(key, out ICellStyle existingStyle))
+            {
+                return existingStyle;
+            }
+
+            // 3. Si no existe, crear uno nuevo
+            ICellStyle newStyle = libro.CreateCellStyle();
+            if (original != null)
+            {
+                newStyle.CloneStyleFrom(original);
+            }
+
+            // Aplicar personalización
+            newStyle.FillPattern = FillPattern.SolidForeground;
+            newStyle.FillForegroundColor = IndexedColors.LightBlue.Index;
+            newStyle.WrapText = true;
+
+            if (customFormat != null)
+                newStyle.DataFormat = df.GetFormat(customFormat);
+            else if (isGeneral)
+                newStyle.DataFormat = df.GetFormat("General");
+
+            // 4. Guardar en el diccionario ANTES de retornar
+            _styleCache[key] = newStyle;
+
+            return newStyle;
+        }
+
+        private static void SetSmartCell(IRow fila, int colIndex, object valor, string formatStr, IWorkbook libro, IDataFormat formato, bool useGeneral)
+        {
+            ICell cell = fila.GetCell(colIndex) ?? fila.CreateCell(colIndex);
+
+            if (valor is DateTime dt) cell.SetCellValue(dt);
+            else cell.SetCellValue(valor?.ToString() ?? "");
+
+            cell.CellStyle = GetCachedStyle(libro, cell.CellStyle, formato, useGeneral, formatStr);
+        }
+
+        public static void UpdateCellsByRowII(string rutaArchivo, int numeroFila, DateTime fecha, DateTime fechaValidacion, string billNumer, string codigoCliente)
+        {
+            try
+            {
+                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.ReadWrite))
+                {
+                    IWorkbook libro = new XSSFWorkbook(archivo);
+                    ISheet hoja = libro.GetSheetAt(0);
+                    IDataFormat formato = libro.CreateDataFormat();
+
+                    _styleCache.Clear();
+
+                    IRow fila = hoja.GetRow(numeroFila) ?? hoja.CreateRow(numeroFila);
+
+                    // --- PROCESAMIENTO DE CELDAS ---
+
+                    // Fecha (Col 0) y Validación (Col 1) con formato específico
+                    SetSmartCell(fila, 0, fecha.Date, "dd/MM/yyyy", libro, formato, true);
+                    SetSmartCell(fila, 1, fechaValidacion.Date, "dd/MM/yyyy", libro, formato, true);
+
+                    // Factura (Col 7) y Cliente (Col 8)
+                    SetSmartCell(fila, 7, billNumer, null, libro, formato, true);
+                    SetSmartCell(fila, 8, codigoCliente, null, libro, formato, true);
+
+                    // Celdas de soporte (Col 2 a 6) - Mantienen formato original pero cambian color
+                    for (int col = 2; col <= 6; col++)
+                    {
+                        var cell = fila.GetCell(col) ?? fila.CreateCell(col);
+                        cell.CellStyle = GetCachedStyle(libro, cell.CellStyle, formato, false, null);
+                    }
+
+                    // --- OPTIMIZACIÓN DE ALTURA ---
+                    // Reemplazamos todos los if-else por una fórmula matemática simple
+                    if (billNumer.Length >= 28)
+                    {
+                        // Cada 30 caracteres aproximadamente subimos 20 puntos de altura
+                        int extraRows = (billNumer.Length - 28) / 31;
+                        fila.HeightInPoints = 40 + (extraRows * 20);
+                    }
+
+                    // Guardar cambios
+                    using (FileStream salida = new FileStream(rutaArchivo, FileMode.Create, FileAccess.Write))
+                    {
+                        libro.Write(salida);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al actualizar las celdas: " + ex.Message);
+            }
+
+        }
         public static bool isRowFilledwithColor(string rutaArchivo, int numeroFila, int cantidadCeldasARevisar)
         {
             try

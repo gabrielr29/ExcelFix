@@ -25,14 +25,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         private void SearchBankMovesProcess()
         {
-
-
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
 
             if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
             {
                 //Este if verifica si el archivo está abierto o no. (No se puede procesar estando abierto)
-                if (FileAccessC.IsOpen(rutaArchivoSeleccionado))
+                if (!FileAccessC.IsOpen(rutaArchivoSeleccionado))
                 {
                     List<string> myList = new List<string>();
 
@@ -178,7 +176,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
             {
                 //Este if verifica si el archivo está abierto o no. (No se puede procesar estando abierto)
-                if (FileAccessC.IsOpen(rutaArchivoSeleccionado))
+                if (!FileAccessC.IsOpen(rutaArchivoSeleccionado))
                 {
 
                     if (dataGridView1.SelectedRows.Count > 0)
@@ -215,7 +213,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                     fechaSeleccionada = DateTime.MinValue; // O asigna otro valor por defecto.
                                 }
 
-                                MovValidatorFunctions.UpdateCellsByRow(rutaArchivoSeleccionado, int.Parse(valor), fechaSeleccionada, DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
+                                MovValidatorFunctions.UpdateCellsByRowII(rutaArchivoSeleccionado, int.Parse(valor), fechaSeleccionada, DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
                                 
                                 SearchBankMovesProcess();
                                                                 
