@@ -54,6 +54,8 @@
             button2 = new Button();
             label3 = new Label();
             createCopy = new Button();
+            comboBoxSheetSelector = new ComboBox();
+            label4 = new Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
@@ -140,9 +142,9 @@
             // searchMovButton
             // 
             searchMovButton.Font = new Font("Consolas", 14.25F, FontStyle.Bold);
-            searchMovButton.Location = new Point(849, 141);
+            searchMovButton.Location = new Point(849, 127);
             searchMovButton.Name = "searchMovButton";
-            searchMovButton.Size = new Size(190, 36);
+            searchMovButton.Size = new Size(190, 50);
             searchMovButton.TabIndex = 3;
             searchMovButton.Text = "Buscar";
             searchMovButton.UseVisualStyleBackColor = true;
@@ -297,6 +299,26 @@
             createCopy.UseVisualStyleBackColor = true;
             createCopy.Click += createCopy_Click;
             // 
+            // comboBoxSheetSelector
+            // 
+            comboBoxSheetSelector.FormattingEnabled = true;
+            comboBoxSheetSelector.Items.AddRange(new object[] { "Hoja 1", "Hoja 2", "Hoja 3", "Hoja 4", "Hoja 5" });
+            comboBoxSheetSelector.Location = new Point(849, 79);
+            comboBoxSheetSelector.Name = "comboBoxSheetSelector";
+            comboBoxSheetSelector.Size = new Size(190, 23);
+            comboBoxSheetSelector.TabIndex = 57;
+            comboBoxSheetSelector.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Consolas", 12F);
+            label4.Location = new Point(849, 56);
+            label4.Name = "label4";
+            label4.Size = new Size(216, 19);
+            label4.TabIndex = 58;
+            label4.Text = "Hoja a trabajar (Excel)";
+            // 
             // ExcelFixForm2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -304,6 +326,8 @@
             BackColor = SystemColors.ActiveCaption;
             BackgroundImageLayout = ImageLayout.None;
             ClientSize = new Size(1349, 652);
+            Controls.Add(label4);
+            Controls.Add(comboBoxSheetSelector);
             Controls.Add(createCopy);
             Controls.Add(label3);
             Controls.Add(button2);
@@ -361,5 +385,7 @@
         private DataGridViewTextBoxColumn BillNumber;
         private DataGridViewTextBoxColumn CostumerCode;
         private DataGridViewTextBoxColumn NRow;
+        private ComboBox comboBoxSheetSelector;
+        private Label label4;
     }
 }

@@ -32,7 +32,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public static List<string> SearchByMount(string rutaArchivo, int startedRowToRevision, decimal montoBusqueda)
+        public static List<string> SearchByMount(string rutaArchivo, int startedRowToRevision, decimal montoBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
@@ -42,7 +42,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
                 {
                     IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
+                    ISheet hoja = libro.GetSheetAt(sheetIndex);
 
                     for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
                     {
@@ -114,7 +114,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             return resultados;
         }
 
-        public static List<string> SearchByReference(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
+        public static List<string> SearchByReference(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
@@ -124,7 +124,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open, FileAccess.Read))
                 {
                     IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
+                    ISheet hoja = libro.GetSheetAt(sheetIndex);
 
                     for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
                     {
@@ -200,30 +200,30 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
          * o bien los últimos 6, agregando más flexibilidad.
          */
 
-        public static List<string> SearchByReferenceIII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda)
+        public static List<string> SearchByReferenceIII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
 
             string digitosBusqueda = referenciaBusqueda.Trim().ToLower();
 
-            resultados = forLoopSearchByReferenceIII(startedRowToRevision, rutaArchivo, digitosBusqueda);
+            resultados = forLoopSearchByReferenceIII(startedRowToRevision, rutaArchivo, digitosBusqueda, sheetIndex);
 
             return resultados;
         }
 
 
-        public static List<string> SearchByReferenceandAmountII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda)
+        public static List<string> SearchByReferenceandAmountII(string rutaArchivo, int startedRowToRevision, string referenciaBusqueda, decimal montoBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
 
             string digitosBusqueda = referenciaBusqueda.Trim().ToLower();
 
-            resultados = forLoopSearchByReferenceandMountII(startedRowToRevision, rutaArchivo, digitosBusqueda, montoBusqueda);
+            resultados = forLoopSearchByReferenceandMountII(startedRowToRevision, rutaArchivo, digitosBusqueda, montoBusqueda, sheetIndex);
 
             return resultados;
         }
 
-        public static List<string> forLoopSearchByReferenceIII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda)
+        public static List<string> forLoopSearchByReferenceIII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
@@ -233,7 +233,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 try
                 {
                     IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
+                    ISheet hoja = libro.GetSheetAt(sheetIndex);
 
                     for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
                     {
@@ -311,7 +311,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             }
         }
 
-        public static List<string> forLoopSearchByReferenceandMountII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda, decimal montoBusqueda)
+        public static List<string> forLoopSearchByReferenceandMountII(int startedRowToRevision, string rutaArchivo, string digitosBusqueda, decimal montoBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
@@ -321,7 +321,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 try
                 {
                     IWorkbook libro = new XSSFWorkbook(archivo);
-                    ISheet hoja = libro.GetSheetAt(0);
+                    ISheet hoja = libro.GetSheetAt(sheetIndex);
 
                     for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
                     {
@@ -400,7 +400,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         // Por retirar, una vez se valide la calidad de las mejoras implementadas
-        public static List<string> forLoopSearchByReferenceII(int startedRowToRevision,string referenciaBusquedaLower, int digitos, string rutaArchivo, string digitosBusqueda)
+        public static List<string> forLoopSearchByReferenceII(int startedRowToRevision,string referenciaBusquedaLower, int digitos, string rutaArchivo, string digitosBusqueda, int sheetIndex)
         {
             List<string> resultados = new List<string>();
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
@@ -412,7 +412,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     try
                     {
                         IWorkbook libro = new XSSFWorkbook(archivo);
-                        ISheet hoja = libro.GetSheetAt(0);
+                        ISheet hoja = libro.GetSheetAt(sheetIndex);
 
                         for (int i = startedRowToRevision; i <= hoja.LastRowNum; i++)
                         {
@@ -487,7 +487,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                 }
                 else
                 {
-                    resultados = SearchByReference(rutaArchivo, startedRowToRevision, referenciaBusquedaLower);
+                    resultados = SearchByReference(rutaArchivo, startedRowToRevision, referenciaBusquedaLower, sheetIndex);
                 }
 
                 return resultados;

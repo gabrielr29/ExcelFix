@@ -22,7 +22,8 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         private void Form3_Load(object sender, EventArgs e)
         {
-
+            int currentYear = DateTime.Now.Year;
+            lblCopyright.Text = $"© {currentYear} ExcelFix · Desarrollado por Gabriel Rodriguez";
         }
 
         private void AjustBankFormats_Click(object sender, EventArgs e)

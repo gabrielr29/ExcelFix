@@ -26,6 +26,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         private void SearchBankMovesProcess()
         {
             ExcelModifyFunctions functions = new ExcelModifyFunctions();
+            int comboBoxIndex = comboBoxSheetSelector.SelectedIndex;
 
             if (!string.IsNullOrEmpty(rutaArchivoSeleccionado))
             {
@@ -45,14 +46,14 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     else if (string.IsNullOrWhiteSpace(ReferenceNumberTextBox.Text) && !string.IsNullOrWhiteSpace(bankMovMountTextBox.Text))
                     {
 
-                        myList = MovValidatorFunctions.SearchByMount(rutaArchivoSeleccionado, 0, decimal.Parse(bankMovMountTextBox.Text));
+                        myList = MovValidatorFunctions.SearchByMount(rutaArchivoSeleccionado, 0, decimal.Parse(bankMovMountTextBox.Text), comboBoxIndex);
 
                     }
 
                     else if (!string.IsNullOrWhiteSpace(ReferenceNumberTextBox.Text) && string.IsNullOrWhiteSpace(bankMovMountTextBox.Text))
                     {
 
-                        myList = MovValidatorFunctions.SearchByReferenceIII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text);
+                        myList = MovValidatorFunctions.SearchByReferenceIII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, comboBoxIndex);
 
                     }
 
@@ -61,12 +62,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                         // Filtrar por monto y referencia, actualizado para considerar referencias cortas                   
 
-                        myList = MovValidatorFunctions.SearchByReferenceandAmountII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text));
-                   
+                        myList = MovValidatorFunctions.SearchByReferenceandAmountII(rutaArchivoSeleccionado, 0, ReferenceNumberTextBox.Text, decimal.Parse(bankMovMountTextBox.Text), comboBoxIndex);
+
 
                     }
 
-                    
+
                     MovValidatorFunctions.ReplaceDataGridViewValues(dataGridView1, myList);
                     MovValidatorFunctions.ColorRowsBySecondColumnValue(dataGridView1);
                 }
@@ -109,7 +110,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
         private void ExcelFixForm2_Load(object sender, EventArgs e)
         {
-
+            comboBoxSheetSelector.SelectedIndex = 0;
         }
 
         private void FormMovValidator_FormClosing(object sender, FormClosingEventArgs e)
@@ -188,12 +189,12 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         string valor = filaSeleccionada.Cells[8].Value?.ToString();
                         string validationDateDataGridView = filaSeleccionada.Cells[1].Value?.ToString();
 
-                        
+
                         if (!string.IsNullOrWhiteSpace(billCodeTextBox.Text) && !string.IsNullOrWhiteSpace(clientCodeTextBox.Text))
                         {
                             if (MovValidatorFunctions.isRowFilledwithColor(rutaArchivoSeleccionado, int.Parse(valor), 4) || !string.IsNullOrEmpty(validationDateDataGridView))
                             {
-                                
+
                                 MessageBox.Show("Este movimiento ya ha sido validado el " + validationDateDataGridView, "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                             }
@@ -214,9 +215,9 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 }
 
                                 MovValidatorFunctions.UpdateCellsByRowII(rutaArchivoSeleccionado, int.Parse(valor), fechaSeleccionada, DateTime.Now, billCodeTextBox.Text, clientCodeTextBox.Text);
-                                
+
                                 SearchBankMovesProcess();
-                                                                
+
                             }
 
                         }
@@ -305,7 +306,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         private void createCopy_Click(object sender, EventArgs e)
-        {           
+        {
             string directorioDestino = getDestinationPathForCopy();
 
             if (directorioDestino != null)
@@ -337,7 +338,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     MessageBox.Show("Primero debes adjuntar un archivo Excel.", "Archivo no seleccionado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                 }
-                
+
             }
 
             else
@@ -364,6 +365,11 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     return null;
                 }
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

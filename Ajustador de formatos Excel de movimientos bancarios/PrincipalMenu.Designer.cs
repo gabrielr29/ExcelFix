@@ -34,7 +34,7 @@
             FixBankFormatsButton = new Krypton.Toolkit.KryptonButton();
             MovValidatorButton = new Krypton.Toolkit.KryptonButton();
             FAQButton = new Krypton.Toolkit.KryptonButton();
-            label3 = new Label();
+            lblCopyright = new Label();
             SuspendLayout();
             // 
             // label1
@@ -120,16 +120,16 @@
             FAQButton.Values.Text = "Saber más sobre ExcelFix";
             FAQButton.Click += FAQForm_Click;
             // 
-            // label3
+            // lblCopyright
             // 
-            label3.AutoSize = true;
-            label3.Font = new Font("Consolas", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(3, 365);
-            label3.Name = "label3";
-            label3.Size = new Size(265, 10);
-            label3.TabIndex = 9;
-            label3.Text = "© 2025 ExcelFix · Desarrollado por Gabriel Rodriguez";
-            label3.Click += label3_Click;
+            lblCopyright.AutoSize = true;
+            lblCopyright.Font = new Font("Consolas", 6.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCopyright.Location = new Point(3, 365);
+            lblCopyright.Name = "lblCopyright";
+            lblCopyright.Size = new Size(265, 10);
+            lblCopyright.TabIndex = 9;
+            lblCopyright.Text = "© 2025 ExcelFix · Desarrollado por Gabriel Rodriguez";
+            lblCopyright.Click += label3_Click;
             // 
             // PrincipalMenu
             // 
@@ -137,7 +137,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(477, 381);
-            Controls.Add(label3);
+            Controls.Add(lblCopyright);
             Controls.Add(FAQButton);
             Controls.Add(MovValidatorButton);
             Controls.Add(FixBankFormatsButton);
@@ -162,6 +162,6 @@
         private Krypton.Toolkit.KryptonButton FixBankFormatsButton;
         private Krypton.Toolkit.KryptonButton MovValidatorButton;
         private Krypton.Toolkit.KryptonButton FAQButton;
-        private Label label3;
+        private Label lblCopyright;
     }
 }
