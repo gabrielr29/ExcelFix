@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
+namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BusinessLogic
 {
     internal class NPOIStyleHelper
     {
@@ -113,7 +113,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
             // Asigna el formato "General" o el formato del estilo original
             newStyle.DataFormat = generalOrOriginal
                                   ? formato.GetFormat("General")
-                                  : (originalStyle != null ? originalStyle.DataFormat : formato.GetFormat("General")); // Default a "General" si no hay original
+                                  : originalStyle != null ? originalStyle.DataFormat : formato.GetFormat("General"); // Default a "General" si no hay original
 
             // 4. Guardar el nuevo estilo en el caché antes de retornarlo
             _cellStyleCache[cacheKey] = newStyle;

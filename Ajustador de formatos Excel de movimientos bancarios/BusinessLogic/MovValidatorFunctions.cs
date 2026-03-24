@@ -12,7 +12,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 
 
-namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
+namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BusinessLogic
 {
     internal class MovValidatorFunctions
     {
@@ -859,7 +859,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     {
                         // Cada 30 caracteres aproximadamente subimos 20 puntos de altura
                         int extraRows = (billNumer.Length - 28) / 31;
-                        fila.HeightInPoints = 40 + (extraRows * 20);
+                        fila.HeightInPoints = 40 + extraRows * 20;
                     }
 
                     // Guardar cambios

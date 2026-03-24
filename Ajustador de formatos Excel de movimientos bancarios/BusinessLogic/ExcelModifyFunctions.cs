@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 
 
-namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
+namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios.BusinessLogic
 {
     internal class ExcelModifyFunctions
     {
@@ -316,7 +316,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         if (celdaOrigen != null)
                         {
                             // Copiar el valor o fórmula de la celda origen a la celda destino
-
                             CopyCellValue(celdaOrigen, celdaDestino);
 
                             // Copiar el estilo de la celda origen a la celda destino (opcional)
@@ -470,8 +469,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 {
                                     if (valor == 0)
                                     {
-                                        celdaDestino.SetCellValue("");
-  
+                                        celdaDestino.SetCellValue("");  
 
                                     }
                                     else
@@ -503,7 +501,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                     else
                                     {
                                         DateTime valorDate = ObtenerValorCeldaFecha(celdaOrigen);
-
                                         celdaDestino.SetCellValue(valorDate);
 
                                     }
@@ -545,9 +542,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                     ICellStyle? estiloOrigen = null;
 
                     // Crear un estilo para el formato numérico
-
                     IDataFormat formatoDatos = libro.CreateDataFormat();
-
 
                     if (celdaOrigenEjemplo != null)
                     {
@@ -579,7 +574,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
                                     estiloDestino = CopyCellStyle(estiloOrigen, libro);
                                     estiloDestino.DataFormat = formatoDatos.GetFormat("#,##0.00");
-
 
                                 }
 
@@ -724,8 +718,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         estilo.SetFont(fuente);
                     }
 
-                    // 5. Asignar el estilo a la celda
-                    
+                    // 5. Asignar el estilo a la celda                    
                     celda.CellStyle = estilo;
 
                     // 6. Cambiar el texto de la celda
@@ -806,7 +799,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
 
         // ----------------------------------------------------------------------------------------------
-
         public void InsertColumnBetweenTwoVersionC2(string rutaArchivo, int indiceColumna)
         {
             try
@@ -831,7 +823,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                         if (celdaOrigen != null)
                         {
                             // Copiar el valor o fórmula de la celda origen a la celda destino
-
                             CopyCellValue(celdaOrigen, celdaDestino);
 
                             // Copiar el estilo de la celda origen a la celda destino (opcional)
@@ -1245,7 +1236,6 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
         }
         
         // Función auxiliar para copiar el contenido y formato de una celda
-
         public ICellStyle CopyCellStyle(ICellStyle estiloOrigen, IWorkbook libro)
         {
 
@@ -1374,85 +1364,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
    
         }
 
-        // POR ELIMINAR --------------------------------------------------------------
-        public void ReverseColumns(string rutaArchivo, int sheetName)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-
-                    try
-                    {
-                        string nombreHoja = libro.GetSheetAt(sheetName).SheetName;
-                        ISheet hoja = libro.GetSheet(nombreHoja);
-                        int ultimaFila = hoja.PhysicalNumberOfRows;
-
-                        List<IRow> filas = new List<IRow>();
-
-                        // Almacenar todas las filas en una lista
-                        for (int i = 0; i < ultimaFila; i++)
-                        {
-                            IRow fila = hoja.GetRow(i);
-                            if (fila != null)
-                            {
-                                filas.Add(fila);
-                            }
-                        }
-
-                        // Reinsertar las filas en orden inverso, sin eliminar filas
-                        int nuevaFilaIndex = 0;
-                        for (int i = filas.Count - 1; i >= 0; i--)
-                        {
-                            IRow nuevaFila = hoja.CreateRow(nuevaFilaIndex);
-                            CopyRow(filas[i], nuevaFila);
-                            nuevaFilaIndex++;
-                            Console.WriteLine($"Fila {i} reinsertada en {nuevaFilaIndex - 1}."); // Depuración
-                        }
-
-                        // Guardar los cambios
-                        using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                        {
-                            libro.Write(archivoSalida);
-                        }
-                    }
-                    catch (ArgumentException ex)
-                    {
-                        Console.WriteLine($"Error: No se encontró la hoja en el índice {sheetName}. {ex.Message}");
-                        return; // Salir de la función si no se encuentra la hoja
-                    }
-                }
-                Console.WriteLine($"Orden de filas invertido exitosamente en la hoja.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al invertir orden de filas: {ex.Message}");
-            }
-        }
-
-        // ----------------------------------------------------------------------------------------
-
-        private void CopyRow(IRow filaOriginal, IRow filaNueva)
-        {
-            if (filaOriginal == null) return;
-
-            for (int i = 0; i < filaOriginal.Cells.Count; i++)
-            {
-                ICell celdaOriginal = filaOriginal.GetCell(i);
-                ICell celdaNueva = filaNueva.CreateCell(i);
-
-                if (celdaOriginal != null)
-                {
-                    // Copiar valor de la celda
-                    celdaNueva.SetCellValue(celdaOriginal.ToString());
-
-                    // Opcional: Copiar estilos, si es necesario
-                    // celdaNueva.CellStyle = celdaOriginal.CellStyle;  // Si quieres copiar el estilo también.
-                }
-            }
-        }
-
+      
 
         public void FormatNumericColumn(string rutaArchivo, int columna, int nHoja)
         {
@@ -1538,76 +1450,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
 
        
 
-        // POR ELIMINAR ----------------------------------------------------------------
-        public void ChangeDateFormatCaseExterior(string rutaArchivo, int columna, int nHoja, int filaIndexStart)
-        {
-            try
-            {
-                using (FileStream archivo = new FileStream(rutaArchivo, FileMode.Open))
-                {
-                    IWorkbook libro = new XSSFWorkbook(archivo);
-                    string nombreHoja = libro.GetSheetAt(nHoja).SheetName;
-                    ISheet hoja = libro.GetSheet(nombreHoja);
-
-                    // Crear estilo de fecha
-                    ICellStyle estiloFecha = libro.CreateCellStyle();
-                    IDataFormat formatoDatos = libro.CreateDataFormat();
-                    estiloFecha.DataFormat = formatoDatos.GetFormat("dd/MM/yyyy");
-
-                    for (int filaIndex = filaIndexStart; filaIndex <= hoja.LastRowNum; filaIndex++)
-                    {
-                        IRow fila = hoja.GetRow(filaIndex);
-                        if (fila != null)
-                        {
-                            ICell celda = fila.GetCell(columna - 1);
-                            if (celda != null && celda.CellType == CellType.Numeric)
-                            {
-                                if (DateUtil.IsCellDateFormatted(celda))
-                                {
-                                    DateTime fecha = ObtenerValorCeldaFecha(celda);
-                                    if (fecha.ToString("yy") != fecha.ToString("yyyy").Substring(2, 2))
-                                    {
-                                        celda.CellStyle = estiloFecha;
-                                    }
-                                }
-                                else
-                                {
-                                    double valorNumerico = celda.NumericCellValue;
-                                    DateTime fechaBase = new DateTime(1899, 12, 30); // Fecha base para Excel
-                                    DateTime fecha = fechaBase.AddDays(valorNumerico);
-
-                                    // Ajuste para el año 1900 (NPOI lo maneja incorrectamente)
-                                    if (fecha.Year == 1900 && valorNumerico < 60)
-                                    {
-                                        fecha = fechaBase.AddDays(valorNumerico + 1);
-                                    }
-
-                                    if (fecha.ToString("yy") != fecha.ToString("yyyy").Substring(2, 2))
-                                    {
-                                        celda.SetCellValue(fecha);
-                                        celda.CellStyle = estiloFecha;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    using (FileStream archivoSalida = new FileStream(rutaArchivo, FileMode.Create))
-                    {
-                        libro.Write(archivoSalida);
-                    }
-                }
-                Console.WriteLine($"Columna {columna} formateada exitosamente.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error al formatear columna: {ex.Message}");
-            }
-        }
-
-
-        // ----------------------------------------------------------------------------------------------
-        public void ConvertColumnToGeneral(string rutaArchivo, int columnaReferencia, int nHoja)
+             public void ConvertColumnToGeneral(string rutaArchivo, int columnaReferencia, int nHoja)
         {
             try
             {
@@ -2027,10 +1870,7 @@ namespace Ajustador_de_formatos_Excel_de_movimientos_bancarios
                                 celda.SetCellValue(0);
                                 celda.CellStyle = estilo;
                             }
-                            //else if (celda.NumericCellValue == 0)
-                            //{
-                            //    celda.CellStyle = estilo;
-                            //}
+
                         }
                     }
 
